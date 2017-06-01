@@ -115,7 +115,8 @@
 
 
     var computer = new THREE.Object3D();
-    computer.position.set(0, 0, -2);
+    computer.position.set(8, 0, -3);
+    computer.rotation.set(0,-.2,0);
 
     var monitor = build(
       'BoxGeometry', [12, 10, 8],
@@ -124,10 +125,11 @@
         shading: THREE.FlatShading,
       }]
     );
+    monitor.position.set(0,.5,0)
     monitor.rotation.set(-.2,0,0);
 
     var screenglass = build(
-      'BoxGeometry', [8, 6, 1],
+      'BoxGeometry', [9, 7, 1],
       'MeshPhongMaterial', [{
         color: 0x000000,
         shading: THREE.FlatShading,
@@ -137,7 +139,7 @@
     monitor.add(screenglass);
 
     var keyboard = build(
-      'BoxGeometry', [12, 2, 3],
+      'BoxGeometry', [12, 1, 3],
       'MeshPhongMaterial', [{
         color: 0xc7c79d,
         shading: THREE.FlatShading,
@@ -149,7 +151,18 @@
 
     computer.add(monitor, keyboard);
 
-    desk.add(table,computer);
+    // Eventually have some notes/drawings about the rocket
+    var paper = build(
+      'BoxGeometry', [8, .125, 10],
+      'MeshPhongMaterial', [{
+        color: 0xdddddd,
+        shading: THREE.FlatShading,
+      }]
+    );
+    paper.position.set(-8, -4.5, 0);
+    paper.rotation.set(0,.2,0);
+
+    desk.add(table,computer, paper);
 
 
     var cupboard1 = build(
@@ -182,7 +195,7 @@
       }]
     );
     conveyor.rotation.set(0,-.2,-.1);
-    conveyor.position.set(-50,20,-80);
+    conveyor.position.set(-30,20,-80);
 
     scene.add(conveyor);
 
@@ -206,15 +219,15 @@
     rocketcone.position.y = 45;
     rocket.add(rocketcone, rocketbody);
 
-    rocket.position.set(-160,30,-100);
+    rocket.position.set(-130,30,-100);
     scene.add(rocket);
 
 
 
     var sceneitems = [];
 
-    desk.radius = 30;
-    desk.step = -30;
+    desk.radius = 20;
+    desk.step = -28;
     cupboard1.radius = cupboard2.radius = cupboard3.radius = 80;
     cupboard1.step = cupboard2.step = cupboard3.step = (.8 * Math.PI) / 3;
     sceneitems.push(desk, cupboard1, cupboard2, cupboard3);
@@ -225,7 +238,6 @@
       item.position.y = 20;
       item.position.x = Math.cos(angle) * item.radius;
       item.position.z = Math.sin(angle) * item.radius;
-      console.log(i);
       scene.add(item);
 
       item.lookAt(new THREE.Vector3(0,20,0));
