@@ -6,7 +6,11 @@
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    gammaInput: true,
+    gammaOutput: true,
+  });
   renderer.setClearColor(scene.fog.color);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -17,6 +21,8 @@
   camera.position.y = 25;
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  var lights = [];
 
   /*
     I've modified OrbitControls.js to addVectors to it's target upon initialization
@@ -31,8 +37,6 @@
   init();
 
   function init() {
-    var ambientLight = new THREE.AmbientLight(0xffffff, .8);
-    scene.add(ambientLight);
 
     function construct(constructor, args) {
       function F() {
@@ -227,6 +231,26 @@
       item.lookAt(new THREE.Vector3(0,20,0));
 
       angle += item.step;
+    });
+
+
+
+
+    // Ambient light
+    lights.push(new THREE.AmbientLight(0xaaaaaa));
+
+    // Light at desk
+    lights.push(new THREE.PointLight(0xffffff,0.5,80));
+    lights[1].lookAt(desk);
+
+    // Light at rocket
+    lights.push(new THREE.PointLight(0xffffff,1,100));
+    lights[2].position.set(rocket.position.x - 20, rocket.position.y, rocket.position.z - 20);
+    lights[2].lookAt(rocket.position);
+
+    // Light it up
+    [].forEach.call(lights, function (light) {
+      scene.add(light);
     });
 
     window.addEventListener('resize', onWindowResize, false);
