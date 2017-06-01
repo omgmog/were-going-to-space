@@ -14,7 +14,7 @@
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 0;
-  camera.position.y = 50;
+  camera.position.y = 25;
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -163,35 +163,70 @@
       }]
     );
     var cupboard3 = build(
-      'BoxGeometry', [45, 40, 10],
+      'BoxGeometry', [45, 40, 20],
       'MeshPhongMaterial', [{
         color: 0xaaaaff,
         shading: THREE.FlatShading,
       }]
     );
 
+    var conveyor = build(
+      'BoxGeometry', [170,2,10],
+      'MeshPhongMaterial', [{
+        color: 0x777777,
+        shading: THREE.FlatShading,
+      }]
+    );
+    conveyor.rotation.set(0,-.2,-.1);
+    conveyor.position.set(-50,20,-80);
+
+    scene.add(conveyor);
+
+
+    var rocket = new THREE.Object3D();
+
+    var rocketcone = build(
+      'CylinderGeometry', [0,20,30,32],
+      'MeshPhongMaterial', [{
+        color: 0xaaffaa,
+        shading: THREE.FlatShading,
+      }]
+    );
+    var rocketbody = build(
+      'CylinderGeometry', [20,20,60,32],
+      'MeshPhongMaterial', [{
+        color: 0xaaffaa,
+        shading: THREE.FlatShading,
+      }]
+    );
+    rocketcone.position.y = 45;
+    rocket.add(rocketcone, rocketbody);
+
+    rocket.position.set(-160,30,-100);
+    scene.add(rocket);
+
 
 
     var sceneitems = [];
 
+    desk.radius = 30;
+    desk.step = -30;
+    cupboard1.radius = cupboard2.radius = cupboard3.radius = 80;
+    cupboard1.step = cupboard2.step = cupboard3.step = (.8 * Math.PI) / 3;
     sceneitems.push(desk, cupboard1, cupboard2, cupboard3);
 
-    var radius = 70;
-    var step = (2*Math.PI) / sceneitems.length;
-    var angle = step * 3;
+    var angle = -90;
 
     [].forEach.call(sceneitems, function (item,i) {
-
-
       item.position.y = 20;
-      item.position.x = Math.cos(angle) * radius;
-      item.position.z = Math.sin(angle) * radius;
+      item.position.x = Math.cos(angle) * item.radius;
+      item.position.z = Math.sin(angle) * item.radius;
       console.log(i);
       scene.add(item);
 
       item.lookAt(new THREE.Vector3(0,20,0));
 
-      angle += step;
+      angle += item.step;
     });
 
     window.addEventListener('resize', onWindowResize, false);
