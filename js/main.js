@@ -250,66 +250,60 @@
     var conveyor = buildconveyor(170, 10, 3, -30, 23, -77, 0, -.2, -.1); // todo
     scene.add(conveyor);
 
+    var flipVertical = new THREE.Matrix4().makeRotationX(Math.PI);
 
     var rocket = new THREE.Object3D();
+
     var rocketPoints = [
       new THREE.Vector2(0, 0),
-      new THREE.Vector2(0, 874),
-      new THREE.Vector2(65, 874),
-      new THREE.Vector2(65, 796),
-      new THREE.Vector2(74, 799),
-      new THREE.Vector2(126, 602),
-      new THREE.Vector2(131, 577),
-      new THREE.Vector2(137, 528),
-      new THREE.Vector2(143, 470),
-      new THREE.Vector2(143, 413),
-      new THREE.Vector2(142, 344),
-      new THREE.Vector2(131, 272),
-      new THREE.Vector2(116, 213),
-      new THREE.Vector2(100, 164),
-      new THREE.Vector2(74, 106),
-      new THREE.Vector2(57, 69),
-      new THREE.Vector2(40, 35),
-      new THREE.Vector2(22, 13),
-      new THREE.Vector2(0, 0)
+      new THREE.Vector2(0.5, 0.4),
+      new THREE.Vector2(1.29992285, 1.43232647),
+      new THREE.Vector2(2.14964952, 3.30962958),
+      new THREE.Vector2(2.76224316, 5.44382679),
+      new THREE.Vector2(2.9796151, 6.86662493),
+      new THREE.Vector2(2.99937619, 8.23013982),
+      new THREE.Vector2(2.99937619, 9.35652168),
+      new THREE.Vector2(2.72027206, 11.6990187),
+      new THREE.Vector2(2.27251293, 13.3075548),
+      new THREE.Vector2(1.61962198, 14.6639325),
+      new THREE.Vector2(1.45801153, 17.3400002),
+      new THREE.Vector2(0, 17.3400002)
     ];
 
-    var rocketbody = build(
-      'LatheGeometry', [rocketPoints, 64],
+    var rocketBody = build(
+      'LatheGeometry', [rocketPoints, 64, 0 , 400],
       'MeshPhongMaterial', [{
         color: 0xeeeeee,
         shading: THREE.SmoothShading,
         specular: 0xffffff,
         shininess: 100,
-        metal: true,
+        // metal: true,
       }]
     );
-    rocketbody.geometry.scale(.1,-.1,.1);
+    rocketBody.geometry.applyMatrix(flipVertical);
+    rocketBody.geometry.scale(7,7,7);
 
 
     // Totally temporary door thing
     var rocketDoorShape = new THREE.Shape();
-    rocketDoorShape.moveTo(7, 168);
-    rocketDoorShape.lineTo(135, 168);
-    rocketDoorShape.lineTo(141, 93);
-    rocketDoorShape.lineTo(142, 77);
-    rocketDoorShape.lineTo(140, 58);
-    rocketDoorShape.lineTo(134, 40);
-    rocketDoorShape.lineTo(123, 25);
-    rocketDoorShape.lineTo(109, 12);
-    rocketDoorShape.lineTo(92, 2);
-    rocketDoorShape.lineTo(71, 0);
-    rocketDoorShape.lineTo(50, 2);
-    rocketDoorShape.lineTo(33, 12);
-    rocketDoorShape.lineTo(19, 25);
-    rocketDoorShape.lineTo(8, 40);
-    rocketDoorShape.lineTo(2, 58);
-    rocketDoorShape.lineTo(0, 77);
-    rocketDoorShape.lineTo(1, 93);
+
+    rocketDoorShape.moveTo(0.147916665, 4);
+    rocketDoorShape.lineTo(2.85267853, 4);
+    rocketDoorShape.lineTo(3.0005952, 1.62708331);
+    rocketDoorShape.lineTo(2.95833329, 1.22559522);
+    rocketDoorShape.lineTo(2.83154758, 0.845238084);
+    rocketDoorShape.lineTo(2.30327378, 0.253571425);
+    rocketDoorShape.lineTo(1.94404759, 0.0422619042);
+    rocketDoorShape.lineTo(1.5002976, 0);
+    rocketDoorShape.lineTo(1.0565476, 0.0422619042);
+    rocketDoorShape.lineTo(0.697321419, 0.253571425);
+    rocketDoorShape.lineTo(0.169047617, 0.845238084);
+    rocketDoorShape.lineTo(0.0422619042, 1.22559522);
+    rocketDoorShape.lineTo(0, 1.62708331);
 
     var rocketDoor = build(
       'ExtrudeGeometry', [rocketDoorShape, {
-        amount: 10,
+        amount: 5,
         bevelEnabled: false,
       }],
       'MeshPhongMaterial', [{
@@ -317,18 +311,73 @@
         shading: THREE.SmoothShading,
       }]
     );
+    rocketDoor.geometry.applyMatrix(flipVertical);
 
-    rocketDoor.geometry.scale(.06,-.06,.06);
-    rocketDoor.position.set(12,-55,8);
-    rocketDoor.rotation.set(0,20,0);
+    rocketDoor.geometry.scale(4,4,4);
+    rocketDoor.position.set(0,-75,22);
 
-    rocket.add(rocketDoor, rocketbody);
 
-    rocket.position.set(-130,100,-100);
+    // Wings
+    var wingShape = new THREE.Shape();
+    wingShape.moveTo(0, 0);
+    wingShape.lineTo(0.881591797, 0.325592041);
+    wingShape.lineTo(1.67909632, 0.998413443);
+    wingShape.lineTo(2.30402536, 1.8873078);
+    wingShape.lineTo(2.65497254, 2.78481932);
+    wingShape.lineTo(2.78297804, 3.8601981);
+    wingShape.lineTo(2.78297804, 5);
+    wingShape.lineTo(2.04452515, 3.91278076);
+    wingShape.lineTo(1.4347229, 3.29016113);
+    wingShape.lineTo(0.75402832, 2.84954834);
+    wingShape.lineTo(0.00935368156, 2.68509582);
+
+    var wing = build(
+      'ExtrudeGeometry', [wingShape, {
+        amount: .2,
+        bevelEnabled: false,
+      }],
+      'MeshPhongMaterial', [{
+        color: 0xff0000,
+        shading: THREE.SmoothShading,
+      }]
+    );
+    wing.geometry.applyMatrix(flipVertical);
+    wing.scale.set(10,10,10);
+    wing.position.y = -75;
+
+    var numWings = 3;
+    var wings = [];
+    var wingsRadius = 11;
+    var wingsStep = (2*Math.PI) / numWings;
+    var wingsAngle = wingsStep * 3;
+
+    for (var i=0; i<numWings; i++) {
+      var _wing = wing.clone();
+
+      _wing.position.x = Math.cos(wingsAngle) * wingsRadius;
+      _wing.position.z = Math.sin(wingsAngle) * wingsRadius;
+
+      // This is terrible... but it works?.. MATHS!
+      if (i === 0) {
+        _wing.rotation.y = wingsAngle;
+      }
+      if (i === 1) {
+        _wing.rotation.y = wingsAngle * 2;
+      }
+      if (i === 2) {
+        _wing.rotation.y = wingsAngle * -1;
+      }
+
+      rocket.add(_wing);
+      wingsAngle += wingsStep;
+    }
+
+    rocket.add(rocketDoor, rocketBody);
+
+    rocket.position.set(-130,125,-97);
+    rocket.rotation.set(0,19.9,0);
 
     scene.add(rocket);
-
-
 
     var sceneitems = [];
 
