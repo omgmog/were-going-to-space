@@ -461,15 +461,16 @@
     // Torso
 
     var torsoShape = new THREE.Shape();
-    torsoShape.moveTo(0, 137);
-    torsoShape.lineTo(59, 0);
-    torsoShape.lineTo(157, 0);
-    torsoShape.lineTo(157, 137);
+
+    torsoShape.moveTo(0,8);
+    torsoShape.lineTo(3,0);
+    torsoShape.lineTo(8,0);
+    torsoShape.lineTo(8,8);
 
 
     var torsoMesh = build(
       'ExtrudeGeometry', [torsoShape, {
-        amount: 100,
+        amount: 10,
         bevelEnabled: false,
       }],
       'MeshPhongMaterial', [{
@@ -477,14 +478,13 @@
         shading: THREE.SmoothShading,
       }]
     );
-    // torsoMesh.geometry.scale(.08,-.1,.12);
-    torsoMesh.geometry.scale(.08,-.1,-.12);
 
     var roboBuddyTorso = new THREE.Object3D();
-    roboBuddyTorso.rotation.y = Math.PI / 2;
-    roboBuddyTorso.position.x = 6;
-    roboBuddyTorso.position.z = 8.5;
-    roboBuddyTorso.position.y = -3.5;
+    roboBuddyTorso.rotation.x = Math.PI;
+    roboBuddyTorso.rotation.y = -Math.PI /2;
+    roboBuddyTorso.position.x = 5;
+    roboBuddyTorso.position.z = 5.5;
+    roboBuddyTorso.position.y = -3.25;
 
     var roboBuddyArmL = new THREE.Object3D();
     var roboBuddyArmMesh = build(
@@ -499,8 +499,8 @@
 
     var roboBuddyArmR = roboBuddyArmL.clone();
 
-    roboBuddyArmL.position.set(3,-2,1);
-    roboBuddyArmR.position.set(3,-2,-13);
+    roboBuddyArmL.position.set(0,2,-.5);
+    roboBuddyArmR.position.set(0,2,10.5);
 
     roboBuddyTorso.add(torsoMesh, roboBuddyArmL, roboBuddyArmR);
 
@@ -511,9 +511,6 @@
     roboBuddy.rotation.y = Math.PI / 3 * -1;
 
     scene.add(roboBuddy);
-
-
-
 
     // Ambient light
     lights.push(new THREE.AmbientLight(0xaaaaaa));
