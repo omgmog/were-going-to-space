@@ -22,7 +22,17 @@
   camera.position.z = 0;
   camera.position.y = 25;
 
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  // Control setup...
+  if ("getVRDisplays" in navigator) {
+    // VRControls if we've got an HMD and the browser can get it
+    controls = new THREE.VRControls(camera, function () {});
+  } else if ("orientation" in window) {
+    // DeviceOrientationControls if we're on a mobile device with gyroscope
+    controls = new THREE.DeviceOrientationControls(camera, true);
+  } else {
+    // OrbitControls for the peasants
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+  }
 
   var lights = [];
 
