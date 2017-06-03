@@ -52,6 +52,8 @@
     );
   */
 
+  var roboBuddy;
+
   init();
 
   function init() {
@@ -389,7 +391,7 @@
 
     desk.radius = 20;
     desk.step = -28;
-    cupboard1.radius = cupboard2.radius = cupboard3.radius = 80;
+    cupboard1.radius = cupboard2.radius = cupboard3.radius = 100;
     cupboard1.step = cupboard2.step = cupboard3.step = (.8 * Math.PI) / 3;
     sceneitems.push(desk, cupboard1, cupboard2, cupboard3);
 
@@ -407,7 +409,7 @@
     });
 
     var roboBuddyColor = 0xaaaaff;
-    var roboBuddy = new THREE.Object3D();
+    roboBuddy = new THREE.Object3D();
     var roboBuddyHead = new THREE.Object3D();
 
     var roboBuddyHeadMesh = build(
@@ -517,6 +519,85 @@
     roboBuddy.rotation.y = Math.PI / 3 * -1;
 
     scene.add(roboBuddy);
+
+
+    // var position = { y: 20 };
+    // var position_to = { y: 40 };
+    // var position_tween = new TWEEN
+    //   .Tween(position)
+    //   .to(position_to, 1000)
+    //   .onUpdate(function() {
+    //     roboBuddy.position.y = position.y;
+    //     console.log('moved');
+    //   })
+    //   .yoyo(true)
+    //   .repeat( Infinity )
+    //   .start();
+
+
+    var randomPoints = [];
+    for ( var i = 0; i < 10; i ++ ) {
+      randomPoints.push(
+        new THREE.Vector3(i, 20, 2 * i)
+      );
+    }
+    var notrandompoints = [];
+    var y = 12;
+    var scale = .3;
+    var offsetX = 38;
+    var offsetZ = -40;
+
+    notrandompoints.push(new THREE.Vector3(offsetX + 8.34765625 * scale, y, offsetZ + 0 * scale)); // conveyor
+    notrandompoints.push(new THREE.Vector3(offsetX + 45.7421875 * scale, y, offsetZ + 13.9453125 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 68.1992188 * scale, y, offsetZ + 69.078125 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 80.8671875 * scale, y, offsetZ + 136.664062 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 78.96875 * scale, y, offsetZ + 226.472656 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 53.7070312 * scale, y, offsetZ + 295.054688 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 13.6132812 * scale, y, offsetZ + 378.972656 * scale)); // shelf
+    notrandompoints.push(new THREE.Vector3(offsetX + 0 * scale, y, offsetZ + 338.460938 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 33.3203125 * scale, y, offsetZ + 273.269531 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 56.734375 * scale, y, offsetZ + 194.066406 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 53.4179688 * scale, y, offsetZ + 117.113281 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 37.0703125 * scale, y, offsetZ + 48.3789063 * scale));
+    notrandompoints.push(new THREE.Vector3(offsetX + 8.34765625 * scale, y, offsetZ + 0 * scale));
+
+    var spline = new THREE.CatmullRomCurve3(notrandompoints, {closed:true});
+
+    console.log(spline.points[0]);
+
+
+    var t = {t:0};
+    var _t = {t:1};
+
+    var matrix = new THREE.Matrix4();
+    var up = new THREE.Vector3( 0, 0, 1 );
+    var axis = new THREE.Vector3( );
+    var radians;
+
+    var postween = new TWEEN
+      .Tween(t)
+      .to(_t, 5000)
+      .delay(500)
+      .onUpdate(function() {
+        // make robo face the right direction
+        var tangent = spline.getTangent(t.t).normalize();
+        axis.crossVectors( up, tangent ).normalize();
+        radians = Math.acos( up.dot( tangent ) );
+        roboBuddy.quaternion.setFromAxisAngle( axis, radians );
+
+        // move along spline
+        var pos = spline.getPointAt(t.t);
+        roboBuddy.position.set(pos.x, pos.y, pos.z);
+        roboBuddy.updateMatrix();
+      })
+      .yoyo(false)
+      .repeat( Infinity )
+      .start();
+
+
+
+
+
 
     // Ambient light
     lights.push(new THREE.AmbientLight(0xaaaaaa));
