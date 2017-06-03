@@ -248,7 +248,7 @@
       }]
     );
     var cupboard3 = build(
-      'BoxGeometry', [45, 40, 20],
+      'BoxGeometry', [45, 40, 10],
       'MeshPhongMaterial', [{
         color: 0xaaaaff,
         shading: THREE.SmoothShading,
