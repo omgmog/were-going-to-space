@@ -19,7 +19,6 @@
   var distance = 1000;
   var FOV = 2 * Math.atan( window.innerHeight / ( 2 * distance ) ) * 180 / Math.PI;
   camera = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, distance);
-  camera.position.z = 0;
   camera.position.y = 25;
 
   // Control setup...
@@ -32,6 +31,11 @@
   } else {
     // OrbitControls for the peasants
     controls = new THREE.OrbitControls(camera, renderer.domElement);
+  }
+  camera.position.z = 0;
+  if (typeof controls.userHeight !== "undefined") {
+    // If we've got the userHeight, use it.
+    camera.position.y = controls.userHeight;
   }
 
   var lights = [];
