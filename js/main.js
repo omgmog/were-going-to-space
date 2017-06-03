@@ -3,6 +3,8 @@
 
   var camera, controls, scene, renderer;
 
+  var clock = new THREE.Clock();
+
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
@@ -548,8 +550,6 @@
 
 
 
-
-
   function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -560,15 +560,18 @@
   }
 
 
-  function render() {
+  function render(dt) {
+    controls.update(dt);
+    TWEEN.update();
     // per frame stuff here
+
+
     renderer.render(scene, camera);
   }
 
   function animate() {
     requestAnimationFrame(animate);
-    controls.update();
-    render();
+    render(clock.getDelta());
   };
   animate();
 
