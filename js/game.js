@@ -17,6 +17,7 @@ var game = (function () {
     TWEEN.update();
     // Per frame stuff here
 
+
     core.renderer.render(core.scene, core.camera);
 
     // if we've got an effect, render it
@@ -129,12 +130,12 @@ var game = (function () {
   var init = function () {
     core.clock = new T.Clock();
     core.cameraHeight = 50;
-    core.distance = 1000;
+    core.distance = 2000;
     core.fov = 50; // fov in Three is vertical, so 40-50 vfov is about 70 in hfov
     core.camera = new T.PerspectiveCamera(core.fov, window.innerWidth / window.innerHeight, 0.1, core.distance);
     core.effect = null;
     core.scene = new T.Scene();
-    core.scene.fog = new T.FogExp2(0x000000, 0.002);
+    core.scene.fog = new T.FogExp2(0x513041, 0.001);
     core.renderer = new T.WebGLRenderer({
       antialias: true,
       gammaInput: true,
@@ -172,7 +173,6 @@ var game = (function () {
       console.log("Setting camera height using userHeight");
       core.camera.position.y = core.controls.userHeight;
     }
-
     core.camera.updateProjectionMatrix();
 
     // Initialise it

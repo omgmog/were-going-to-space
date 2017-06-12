@@ -8,11 +8,14 @@
   utils.debugAxis();
 
   // floor
+  var floorTexture = T.ImageUtils.loadTexture('assets/floor.jpg');
+  floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+  floorTexture.repeat.set(4, 4);
 
   var floor = utils.build(
-    'PlaneGeometry', [1000, 1000, 10, 10],
-    'MeshPhongMaterial', [{
-      color: 0x1a1a1a,
+    'PlaneGeometry', [3000, 3000, 10, 10],
+    'MeshLambertMaterial', [{
+      map: floorTexture,
       shading: T.SmoothShading,
       side: T.DoubleSide,
     }]
@@ -21,6 +24,17 @@
   floor.rotation.x = utils.tau;
 
   utils.append(floor, core.scene);
+
+
+  // sky
+  var background = new T.CubeTextureLoader()
+  .load([
+    'assets/sist_bk.jpg', 'assets/sist_ft.jpg',
+    'assets/sist_up.jpg', 'assets/sist_dn.jpg',
+    'assets/sist_lf.jpg', 'assets/sist_rt.jpg'
+  ]);
+
+  core.scene.background = background;
 
 
   // rocket
