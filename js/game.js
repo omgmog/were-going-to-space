@@ -118,6 +118,22 @@ var game = (function () {
     utils.append(new T.AxisHelper(100), core.scene);
   };
 
+  // return leg positions as x/z arrays
+  utils.positionLegs = function (props) {
+    var halfw = props.width / 2;
+    var mhalfw = -1 * halfw;
+    var halfd = props.depth / 2;
+    var mhalfd = -1 * halfd;
+    var leg = props.legThickness;
+
+    return [
+      [mhalfw + leg, mhalfd + leg],
+      [mhalfw + leg, halfd - leg],
+      [halfw - leg, mhalfd + leg],
+      [halfw - leg, halfd - leg]
+    ]
+  };
+
 
 
   /////////////////////////////////////////////////////////////////////////////

@@ -203,19 +203,13 @@
     }]
   );
   var tableLegs = [];
-  var tableLegPositions = [
-    [-(tableProps.width / 2) + tableProps.legThickness, -(tableProps.depth / 2) + tableProps.legThickness],
-    [-(tableProps.width / 2) + tableProps.legThickness, (tableProps.depth / 2) - tableProps.legThickness],
-    [(tableProps.width / 2) - tableProps.legThickness, -(tableProps.depth / 2) + tableProps.legThickness],
-    [(tableProps.width / 2) - tableProps.legThickness, (tableProps.depth / 2) - tableProps.legThickness]
-  ];
 
   for (var i=0; i<tableProps.legsCount; i++) {
     var _tableLeg = tableLeg.clone();
     _tableLeg.position.set(
-      tableLegPositions[i][0],
+      utils.positionLegs(tableProps)[i][0],
       -1 * (tableProps.height / 2),
-      tableLegPositions[i][1]
+      utils.positionLegs(tableProps)[i][1]
     );
     tableLegs.push(_tableLeg);
   }
@@ -364,7 +358,7 @@
     depth: 10,
     height: 30,
     legs: 4,
-    legWidth: 1,
+    legThickness: 1,
   };
 
   var shelf = utils.build(
@@ -385,24 +379,18 @@
 
 
   var cupboardLeg = utils.build(
-    'CylinderGeometry', [cupboardProps.legWidth, cupboardProps.legWidth, cupboardProps.height, 8],
+    'CylinderGeometry', [cupboardProps.legThickness, cupboardProps.legThickness, cupboardProps.height, 8],
     'MeshPhongMaterial', [{
       color: 0xdd0000,
       shading: T.SmoothShading,
     }]
   );
-  var cupboardLegPositions = [
-    [-(cupboardProps.width / 2) + cupboardProps.legWidth, -(cupboardProps.depth / 2) + cupboardProps.legWidth],
-    [-(cupboardProps.width / 2) + cupboardProps.legWidth, (cupboardProps.depth / 2) - cupboardProps.legWidth],
-    [(cupboardProps.width / 2) - cupboardProps.legWidth, -(cupboardProps.depth / 2) + cupboardProps.legWidth],
-    [(cupboardProps.width / 2) - cupboardProps.legWidth, (cupboardProps.depth / 2) - cupboardProps.legWidth]
-  ];
   var cupboardLegs = [];
   for (var i=0; i <cupboardProps.legs; i++) {
     var _cupboardLeg = cupboardLeg.clone();
     _cupboardLeg.position.y = (cupboardProps.height / 2);
-    _cupboardLeg.position.x = cupboardLegPositions[i][0];
-    _cupboardLeg.position.z = cupboardLegPositions[i][1];
+    _cupboardLeg.position.x = utils.positionLegs(cupboardProps)[i][0];
+    _cupboardLeg.position.z = utils.positionLegs(cupboardProps)[i][1];
 
     shelves.push(_cupboardLeg);
   }
