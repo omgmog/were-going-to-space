@@ -59,11 +59,11 @@
     new T.Vector2(0, 17.3400002)
   ];
   var rocketBody = utils.build(
-    'LatheGeometry', [rocketGeo, 128],
+    'LatheGeometry', [rocketGeo, 16],
     'MeshPhongMaterial', [{
-      color: 0xeeeeee,
+      color: utils.colors.light_gray,
       shading: T.SmoothShading,
-      specular: 0xffffff,
+      specular: utils.colors.white,
       shininess: 90,
     }]
   );
@@ -91,7 +91,7 @@
       bevelEnabled: false,
     }],
     'MeshPhongMaterial', [{
-      color: 0xdd0000,
+      color: utils.colors.light_red,
       shading: T.SmoothShading,
     }]
   );
@@ -130,7 +130,7 @@
   var belt = utils.build(
     'BoxGeometry', [conveyorProps.length, 1, conveyorProps.width],
     'MeshPhongMaterial', [{
-      color: 0x777777,
+      color: utils.colors.dark_gray,
       shading: T.SmoothShading,
     }]
   );
@@ -144,7 +144,7 @@
   var wheel = utils.build(
     'CylinderGeometry', [conveyorProps.wheelSize, conveyorProps.wheelSize, conveyorProps.width - 2, 16],
     'MeshPhongMaterial', [{
-      color: 0xeeeeee,
+      color: utils.colors.light_gray,
       shading: T.SmoothShading,
     }]
   );
@@ -176,7 +176,7 @@
     topThickness: 1,
     legThickness: 1,
     legsCount: 4,
-    color: 0xaaaaaa,
+    color: utils.colors.light_gray,
   };
   table.position.y = tableProps.height;
   table.position.z = -40;
@@ -226,14 +226,14 @@
     var monitorShell = utils.build(
       'BoxGeometry', [16, 12, 5],
       'MeshPhongMaterial', [{
-        color: 0x333333,
+        color: utils.colors.dark_gray,
         shading: T.SmoothShading,
       }]
     );
     var monitorStand = utils.build(
       'CylinderGeometry', [2, 2, 2, 8],
       'MeshPhongMaterial', [{
-        color: 0x333333,
+        color: utils.colors.dark_gray,
         shading: T.SmoothShading,
       }]
     );
@@ -242,7 +242,7 @@
     var monitorScreen = utils.build(
       'PlaneGeometry', [14, 10, 1],
       'MeshPhongMaterial', [{
-        color: 0x000000,
+        color: utils.colors.black,
         shading: T.SmoothShading,
       }]
     );
@@ -273,7 +273,7 @@
     var keyboardProps = {
       depth: 1 + ((keyProps.total / keyProps.wrap) * (keyProps.width + keyProps.gutter)),
       width: 1 + (keyProps.wrap * (keyProps.width + keyProps.gutter)),
-      color: 0x333333,
+      color: utils.colors.dark_gray,
     };
     keyboard.position.z = 3;
     keyboard.rotation.y = utils.d2r(-10);
@@ -321,7 +321,7 @@
       // Make ESC red
       if (i === 0) {
         _key.material = key.material.clone();
-        _key.material.color.setHex(0xdd0000);
+        _key.material.color.setHex(utils.colors.dark_red);
       }
       // Make a space bar
       if (i === 60) {
@@ -364,7 +364,7 @@
   var shelf = utils.build(
     'BoxGeometry', [cupboardProps.width, 1, cupboardProps.depth],
     'MeshPhongMaterial', [{
-      color: 0xff0000,
+      color: utils.colors.light_gray,
       shading: T.SmoothShading,
     }]
   );
@@ -381,7 +381,7 @@
   var cupboardLeg = utils.build(
     'CylinderGeometry', [cupboardProps.legThickness, cupboardProps.legThickness, cupboardProps.height, 8],
     'MeshPhongMaterial', [{
-      color: 0xdd0000,
+      color: utils.colors.light_gray,
       shading: T.SmoothShading,
     }]
   );
@@ -423,10 +423,10 @@
 
 
   // lights
-  var ambient = new T.AmbientLight(0xbbbbbb);
+  var ambient = new T.AmbientLight(utils.colors.light_gray);
   utils.append(ambient, core.scene);
 
-  var directional = new T.DirectionalLight(0xffffff, .4);
+  var directional = new T.DirectionalLight(utils.colors.white, .4);
   directional.castShadow = true;
   directional.position.z = -10;
   directional.position.y = 50;

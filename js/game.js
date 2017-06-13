@@ -134,6 +134,25 @@ var game = (function () {
     ]
   };
 
+  utils.colors = {
+    black: 0x000000,
+    white: 0xffffff,
+    light_gray: 0xaaaaaa,
+    dark_gray: 0x555555,
+    yellow: 0xffff55,
+    brown: 0xaa5500,
+    light_red: 0xff5555,
+    dark_red: 0xaa0000,
+    light_green: 0x55ff55,
+    dark_green: 0x00aa00,
+    light_cyan: 0x55ffff,
+    dark_cyan: 0x00aaaa,
+    light_blue: 0x5555ff,
+    dark_blue: 0x0000aa,
+    light_magenta: 0xff55ff,
+    dark_magenta: 0xaa00aa,
+  };
+
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -151,7 +170,7 @@ var game = (function () {
     core.camera = new T.PerspectiveCamera(core.fov, window.innerWidth / window.innerHeight, 0.1, core.distance);
     core.effect = null;
     core.scene = new T.Scene();
-    core.scene.fog = new T.FogExp2(0x513041, 0.001);
+    core.scene.fog = new T.FogExp2(utils.colors.black, 0.001);
     core.renderer = new T.WebGLRenderer({
       antialias: true,
       gammaInput: true,
