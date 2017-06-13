@@ -8,9 +8,9 @@
   utils.debugAxis();
 
   // floor
-  var floorTexture = T.ImageUtils.loadTexture('assets/floor.jpg');
+  var floorTexture = T.ImageUtils.loadTexture('assets/dn.jpg');
   floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-  floorTexture.repeat.set(4, 4);
+  floorTexture.repeat.set(8, 8);
 
   var floor = utils.build(
     'PlaneGeometry', [3000, 3000, 10, 10],
@@ -29,9 +29,9 @@
   // sky
   var background = new T.CubeTextureLoader()
   .load([
-    'assets/sist_bk.jpg', 'assets/sist_ft.jpg',
-    'assets/sist_up.jpg', 'assets/sist_dn.jpg',
-    'assets/sist_lf.jpg', 'assets/sist_rt.jpg'
+    'assets/bk.jpg', 'assets/ft.jpg',
+    'assets/up.jpg', 'assets/dn.jpg',
+    'assets/lf.jpg', 'assets/rt.jpg'
   ]);
 
   core.scene.background = background;
