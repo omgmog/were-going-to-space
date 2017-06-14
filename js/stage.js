@@ -379,7 +379,8 @@
       utils.namedObject("slot1"),
       utils.namedObject("slot2")
     ], _shelf);
-    var ypos = -13;
+
+    var ypos = 7;
 
     _shelf.children[0].position.set(-(cupboardProps.width / 3), ypos, 0);
     _shelf.children[1].position.set(0, ypos, 0);
@@ -432,16 +433,15 @@
 
 
 
-  // Stick some gnomes on the shelves
+  // Stick some items on the shelves
 
   for (var i=0; i<3; i++) {
     for (var j=0; j<3; j++) {
       for (var k=0; k<3; k++) {
-        utils.append(game.items.gnome.clone(), utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
+        utils.append(game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock'])].clone(), utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
       }
     }
   }
-
 
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);

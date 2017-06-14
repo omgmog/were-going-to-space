@@ -6,8 +6,20 @@ game.items = (function () {
   var utils = game.utils;
   var core = game.core;
 
+  // private items (not returned);
 
-
+  var _items = {
+    _cube: function () {
+      // returns a basic cube
+      return utils.build(
+        'BoxGeometry', [1,1,1],
+        'MeshPhongMaterial', [{
+          color: utils.colors.dark_red,
+          shading: T.SmoothShading,
+        }]
+      );
+    },
+  }
   var items = {
     gnome: function () {
       var item = new T.Object3D();
@@ -144,12 +156,61 @@ game.items = (function () {
 
       utils.append([head, body], item);
 
-      item.position.y = 20;
+      // item.position.y = 20;
       return item;
-    }
+    },
+    cone: function () {
+      var item = new T.Object3D();
+      var cone = new utils.build(
+        'CylinderGeometry', [.6, 1.9, 5, 12],
+        'MeshPhongMaterial', [{
+          color: utils.colors.light_red,
+          shading: T.SmoothShading,
+        }]
+      );
+      var base = new utils.build(
+        'BoxGeometry', [5, .5, 5],
+        'MeshPhongMaterial', [{
+          color: utils.colors.light_red,
+          shading: T.SmoothShading,
+        }]
+      );
+      base.position.y = -2.5;
+
+      utils.append([cone, base], item);
+      item.position.y = -3.75;
+      return item;
+    },
+    dirtblock: function () {
+      var item = _items._cube().clone();
+      item.scale.set(8,8,8);
+
+      var textures = [
+        'assets/side.jpg', 'assets/side.jpg',
+        'assets/top.jpg', 'assets/bottom.jpg',
+        'assets/side.jpg', 'assets/side.jpg'
+      ];
+      var mats = [];
+      for (var i=0; i<textures.length;i++) {
+        var texture = new T.TextureLoader().load(textures[i]);
+        texture.anisotropy = core.renderer.getMaxAnisotropy();
+        mats.push(new T.MeshPhongMaterial({
+          color: utils.colors.white,
+          map: texture,
+        }));
+      }
+
+      item.material = mats;
+
+      item.position.y = -2.5;
+      item.rotation.y = utils.d2r(45);
+      return item;
+    },
   };
 
   return {
     gnome: items.gnome(),
+    cone: items.cone(),
+    dirtblock: items.dirtblock(),
   };
 }());
