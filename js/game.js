@@ -163,6 +163,10 @@ var game = (function () {
     return parent.getObjectByName(name);
   }
 
+  utils.getRandomItem = function (items) {
+    return items[Math.floor(Math.random() * items.length)];
+  };
+
 
 
   /////////////////////////////////////////////////////////////////////////////
