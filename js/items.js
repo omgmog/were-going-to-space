@@ -183,7 +183,7 @@ game.items = (function () {
     },
     dirtblock: function () {
       var item = _items._cube().clone();
-      item.scale.set(8,8,8);
+      item.scale.set(4,4,4);
 
       var textures = [
         'assets/side.jpg', 'assets/side.jpg',
@@ -202,7 +202,7 @@ game.items = (function () {
 
       item.material = mats;
 
-      item.position.y = -2.5;
+      item.position.y = -4.5;
       item.rotation.y = utils.d2r(45);
       return item;
     },
