@@ -4,6 +4,7 @@
   var T = THREE;
   var utils = game.utils;
   var core = game.core;
+  var items = game.items;
 
   utils.debugAxis();
 
@@ -420,6 +421,7 @@
 
 
 
+  utils.append(game.items.gnome, core.scene);
 
 
   // lights
