@@ -145,7 +145,6 @@ game.items = (function () {
       utils.append([head, body], item);
 
       item.position.y = 20;
-      item.rotation.y = utils.d2r(90);
       return item;
     }
   };

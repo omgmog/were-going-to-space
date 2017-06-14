@@ -153,6 +153,16 @@ var game = (function () {
     dark_magenta: 0xaa00aa,
   };
 
+  utils.namedObject = function (name) {
+    var _object = new T.Object3D();
+    _object.name = name;
+    return _object;
+  };
+
+  utils.getNamedObject = function (parent, name) {
+    return parent.getObjectByName(name);
+  }
+
 
 
   /////////////////////////////////////////////////////////////////////////////

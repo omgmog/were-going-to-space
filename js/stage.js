@@ -374,6 +374,17 @@
     var _shelf = shelf.clone();
     _shelf.position.y = 10 + (i * 10);
 
+    utils.append([
+      utils.namedObject("slot0"),
+      utils.namedObject("slot1"),
+      utils.namedObject("slot2")
+    ], _shelf);
+    var ypos = -13;
+
+    _shelf.children[0].position.set(-(cupboardProps.width / 3), ypos, 0);
+    _shelf.children[1].position.set(0, ypos, 0);
+    _shelf.children[2].position.set(cupboardProps.width / 3, ypos, 0);
+
     shelves.push(_shelf);
   }
   utils.append(shelves, cupboard);
@@ -395,8 +406,8 @@
 
     shelves.push(_cupboardLeg);
   }
-  utils.append(cupboardLegs, cupboard);
   utils.append(shelves, cupboard);
+  utils.append(cupboardLegs, cupboard);
 
 
   var totalCupboards = 3;
@@ -421,7 +432,15 @@
 
 
 
-  utils.append(game.items.gnome, core.scene);
+  // Stick some gnomes on the shelves
+
+  for (var i=0; i<3; i++) {
+    for (var j=0; j<3; j++) {
+      for (var k=0; k<3; k++) {
+        utils.append(game.items.gnome.clone(), utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
+      }
+    }
+  }
 
 
   // lights
