@@ -9,7 +9,7 @@
   utils.debugAxis();
 
   // floor
-  var floorTexture = T.ImageUtils.loadTexture('assets/dn.jpg');
+  var floorTexture = new T.TextureLoader().load('assets/dn.jpg');
   floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
   floorTexture.repeat.set(8, 8);
 
