@@ -19,8 +19,9 @@ var game = (function () {
 
   // graphics update
   utils.render = function (delta) {
-    core.controls.update(delta);
     TWEEN.update();
+    Reticulum.update();
+    core.controls.update(delta);
     // Per frame stuff here
     if (core.spinningItem) {
       core.spinningItem.rotation.y += 0.01;
@@ -202,6 +203,17 @@ var game = (function () {
     });
   };
 
+  utils.gaze = function (obj, over, out, tap, long) {
+    // have the object react when user looks at it
+    Reticulum.add( obj, {
+      reticleHoverColor: 0x00fff6,
+      onGazeOver: function () {over()},
+      onGazeOut: function () {out()},
+      onGazeLong: function () {long()},
+      onGazeClick: function () {tap()},
+    });
+  };
+
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -259,6 +271,36 @@ var game = (function () {
     // Initialise it
     window.addEventListener('resize', utils.onWindowResize, false);
     document.body.appendChild(core.renderer.domElement);
+
+    Reticulum.init(core.camera, {
+      proximity: false,
+      clickevents: true,
+      reticle: {
+        visible: true,
+        restPoint: 500, //Defines the reticle's resting point when no object has been targeted
+        color: utils.colors.light_gray,
+        innerRadius: 0.0001,
+        outerRadius: 0.003,
+        hover: {
+          color: utils.colors.light_cyan,
+          innerRadius: 0.02,
+          outerRadius: 0.024,
+          speed: 5,
+          vibrate: 50 //Set to 0 or [] to disable
+        }
+      },
+      fuse: {
+        visible: true,
+        duration: 2.5,
+        color: utils.colors.light_magenta,
+        innerRadius: 0.045,
+        outerRadius: 0.06,
+        vibrate: 100, //Set to 0 or [] to disable
+        clickCancelFuse: false //If users clicks on targeted object fuse is canceled
+      }
+    });
+
+
     utils.animate();
   };
 
