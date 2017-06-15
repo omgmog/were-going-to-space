@@ -182,8 +182,10 @@ game.items = (function () {
       return item;
     },
     dirtblock: function () {
-      var item = _items._cube().clone();
-      item.scale.set(4,4,4);
+      var item = new T.Object3D();
+
+      var dirtblock = _items._cube().clone();
+      dirtblock.scale.set(4,4,4);
 
       var textures = [
         'assets/side.jpg', 'assets/side.jpg',
@@ -199,9 +201,9 @@ game.items = (function () {
           map: texture,
         }));
       }
+      dirtblock.material = mats;
 
-      item.material = mats;
-
+      utils.append([dirtblock], item);
       item.position.y = -4.5;
       item.rotation.y = utils.d2r(45);
       return item;
