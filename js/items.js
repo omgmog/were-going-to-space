@@ -282,7 +282,9 @@ game.items = (function () {
 
       utils.append([body, bubble], item);
 
-      item.position.y = -5;
+      item.position.y = -3.8;
+
+      item.scale.set(2.5,2.5,2.5);
 
       return item;
     }
