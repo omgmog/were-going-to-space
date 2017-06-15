@@ -424,7 +424,7 @@
   for (var i=0; i<cupboards.length; i++) {
     for (var j=0; j<cupboardProps.shelves; j++) {
       for (var k=0; k<3; k++) {
-        var _obj = game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock'])].clone();
+        var _obj = game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock', 'printedsaveicons'])]().clone();
         // utils.wireframeify(_obj);
         // utils.unwireframeify(_obj);
         utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
@@ -435,10 +435,10 @@
   utils.wireframeify(targetItem);
   targetItem.position.y = 3.5;
   core.spinningItem = targetItem;
-  console.log(targetItem);
+
   var targetScreen = utils.getNamedObject(monitor, "screen");
-  console.log(targetScreen);
-  utils.append([targetItem], targetScreen);
+
+  utils.append(targetItem, targetScreen);
 
 
 

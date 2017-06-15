@@ -190,16 +190,51 @@ game.items = (function () {
       }
       dirtblock.material = mats;
 
-      utils.append([dirtblock], item);
+      utils.append(dirtblock, item);
       item.position.y = -4.5;
       item.rotation.y = utils.d2r(45);
+      return item;
+    },
+    printedsaveicons: function () {
+      var item = new T.Object3D();
+
+      var diskThickness = .2;
+      var disk = utils.build(
+        'BoxGeometry', [2, diskThickness, 2],
+        'MeshPhongMaterial', [{
+          color: utils.colors.white,
+          map: new T.TextureLoader().load('assets/floppy.png')
+        }]
+      );
+
+      var disks = [];
+      var numDisks = 10;
+      for (var i=0; i<numDisks;i++) {
+        var _disk = disk.clone();
+        _disk.rotation.y = utils.getRandomItem([.1, .5, .3, .25, -.1]) * i;
+        _disk.position.y = (i + 1) * diskThickness;
+        disks.push(_disk);
+      }
+      var solodisk = disk.clone();
+      solodisk.rotation.x = utils.d2r(-15);
+      solodisk.rotation.z = utils.d2r(45);
+      solodisk.position.y = 1;
+      solodisk.position.x = -2;
+
+      disks.push(solodisk);
+
+      utils.append(disks, item);
+
+      // utils.append(diskette, item);
+      item.position.y = -6.5;
       return item;
     },
   };
 
   return {
-    gnome: items.gnome(),
-    cone: items.cone(),
-    dirtblock: items.dirtblock(),
+    gnome: items.gnome,
+    cone: items.cone,
+    dirtblock: items.dirtblock,
+    printedsaveicons: items.printedsaveicons,
   };
 }());
