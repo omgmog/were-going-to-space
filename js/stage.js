@@ -17,7 +17,6 @@
     'PlaneGeometry', [3000, 3000, 10, 10],
     'MeshLambertMaterial', [{
       map: floorTexture,
-      shading: T.SmoothShading,
       side: T.DoubleSide,
     }]
   );
@@ -63,7 +62,6 @@
     'LatheGeometry', [rocketGeo, 16],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
-      shading: T.SmoothShading,
       specular: utils.colors.white,
       shininess: 90,
     }]
@@ -93,7 +91,6 @@
     }],
     'MeshPhongMaterial', [{
       color: utils.colors.light_red,
-      shading: T.SmoothShading,
     }]
   );
   wing.geometry.applyMatrix(utils.flipVertical());
@@ -132,7 +129,6 @@
     'BoxGeometry', [conveyorProps.length, 1, conveyorProps.width],
     'MeshPhongMaterial', [{
       color: utils.colors.dark_gray,
-      shading: T.SmoothShading,
     }]
   );
   var belts = [];
@@ -146,7 +142,6 @@
     'CylinderGeometry', [conveyorProps.wheelSize, conveyorProps.wheelSize, conveyorProps.width - 2, 16],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
-      shading: T.SmoothShading,
     }]
   );
   wheel.rotation.x = utils.tau;
@@ -187,7 +182,6 @@
     'BoxGeometry', [tableProps.width, tableProps.topThickness, tableProps.depth],
     'MeshPhongMaterial', [{
       color: tableProps.color,
-      shading: T.SmoothShading,
     }]
   );
   utils.append(tableTop, table);
@@ -200,7 +194,6 @@
     ],
     'MeshPhongMaterial', [{
       color: tableProps.color,
-      shading: T.SmoothShading,
     }]
   );
   var tableLegs = [];
@@ -228,14 +221,12 @@
       'BoxGeometry', [16, 12, 5],
       'MeshPhongMaterial', [{
         color: utils.colors.dark_gray,
-        shading: T.SmoothShading,
       }]
     );
     var monitorStand = utils.build(
       'CylinderGeometry', [2, 2, 2, 8],
       'MeshPhongMaterial', [{
         color: utils.colors.dark_gray,
-        shading: T.SmoothShading,
       }]
     );
     monitorStand.position.y = -7;
@@ -244,7 +235,6 @@
       'PlaneGeometry', [14, 10, 1],
       'MeshPhongMaterial', [{
         color: utils.colors.black,
-        shading: T.SmoothShading,
       }]
     );
     monitorScreen.position.z = 2.6;
@@ -284,7 +274,6 @@
       'BoxGeometry', [keyboardProps.width, 1, keyboardProps.depth],
       'MeshPhongMaterial', [{
         color: keyboardProps.color,
-        shading: T.SmoothShading,
       }]
     );
     utils.append(keyboardBase, keyboard);
@@ -293,7 +282,6 @@
       'CylinderGeometry', [keyProps.width * .66, keyProps.width, keyProps.height, 4],
       'MeshPhongMaterial', [{
         color: keyboardProps.color,
-        shading: T.SmoothShading,
       }]
     );
     key.rotation.y = utils.d2r(45);
@@ -367,7 +355,6 @@
     'BoxGeometry', [cupboardProps.width, 1, cupboardProps.depth],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
-      shading: T.SmoothShading,
     }]
   );
   var shelves = [];
@@ -396,7 +383,6 @@
     'CylinderGeometry', [cupboardProps.legThickness, cupboardProps.legThickness, cupboardProps.height, 8],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
-      shading: T.SmoothShading,
     }]
   );
   var cupboardLegs = [];

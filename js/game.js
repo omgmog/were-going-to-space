@@ -101,7 +101,13 @@ var game = (function () {
   utils.build = function (geotype, geoprops, mattype, matprops) {
     return new T.Mesh(
       utils.construct(T[geotype], geoprops),
-      utils.construct(T[mattype], matprops)
+      utils.construct(T[mattype], [Object.assign(
+        {},
+        {
+          shading: T.SmoothShading,
+        },
+        matprops[0]
+      )])
     );
   };
 

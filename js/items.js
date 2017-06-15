@@ -15,7 +15,6 @@ game.items = (function () {
         'BoxGeometry', [1,1,1],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_red,
-          shading: T.SmoothShading,
         }]
       );
     },
@@ -29,7 +28,6 @@ game.items = (function () {
         'ConeGeometry', [1, 3, 8],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
-          shading: T.SmoothShading,
         }]
       );
       hat.rotation.x = utils.d2r(-15);
@@ -37,7 +35,6 @@ game.items = (function () {
         'SphereGeometry', [1, 16, 16],
         'MeshPhongMaterial', [{
           color: utils.colors.yellow,
-          shading: T.SmoothShading,
         }]
       );
       face.position.y = -2;
@@ -46,7 +43,6 @@ game.items = (function () {
         'SphereGeometry',[.125, 8, 8],
         'MeshPhongMaterial',[{
           color: utils.colors.black,
-          shading: T.SmoothShading,
         }]
       );
       eye.position.z = 1.5;
@@ -60,7 +56,6 @@ game.items = (function () {
         'CylinderGeometry', [2, 2, .2, 3, 1, false, 5.8, 1],
         'MeshPhongMaterial', [{
           color: utils.colors.light_gray,
-          shading: T.SmoothShading,
         }]
       );
       beard.rotation.x = utils.d2r(-120);
@@ -75,7 +70,6 @@ game.items = (function () {
         'SphereGeometry', [1.5, 16, 8, 0, utils.pi],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_blue,
-          shading: T.SmoothShading,
         }]
       );
       torso.scale.z = 1.5;
@@ -87,14 +81,12 @@ game.items = (function () {
         'CylinderGeometry', [.5, .5, 2],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_blue,
-          shading: T.SmoothShading,
         }]
       );
       var hand = utils.build(
         'SphereGeometry', [.5, 8, 8],
         'MeshPhongMaterial', [{
           color: utils.colors.yellow,
-          shading: T.SmoothShading,
         }]
       );
       hand.position.y = -1;
@@ -117,7 +109,6 @@ game.items = (function () {
         'SphereGeometry', [1.5, 16, 8],
         'MeshPhongMaterial', [{
           color: utils.colors.brown,
-          shading: T.SmoothShading,
         }]
       );
       hips.scale.y = .5;
@@ -127,7 +118,6 @@ game.items = (function () {
         'CylinderGeometry', [.5, .5, 1],
         'MeshPhongMaterial', [{
           color: utils.colors.brown,
-          shading: T.SmoothShading,
         }]
       );
 
@@ -135,7 +125,6 @@ game.items = (function () {
         'SphereGeometry', [.5, 8, 8],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_gray,
-          shading: T.SmoothShading,
         }]
       );
       foot.position.y = -.5;
@@ -165,14 +154,12 @@ game.items = (function () {
         'CylinderGeometry', [.6, 1.9, 5, 12],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
-          shading: T.SmoothShading,
         }]
       );
       var base = new utils.build(
         'BoxGeometry', [5, .5, 5],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
-          shading: T.SmoothShading,
         }]
       );
       base.position.y = -2.5;
