@@ -248,6 +248,7 @@
       }]
     );
     monitorScreen.position.z = 2.6;
+    monitorScreen.name = "screen";
 
 
     monitor.position.x = 1;
@@ -444,6 +445,16 @@
       }
     }
   }
+  var targetItem = (utils.getNamedObject(cupboards[1].children[1], "slot1")).clone();
+  utils.wireframeify(targetItem);
+  targetItem.position.y = 3.5;
+  core.spinningItem = targetItem;
+  console.log(targetItem);
+  var targetScreen = utils.getNamedObject(monitor, "screen");
+  console.log(targetScreen);
+  utils.append([targetItem], targetScreen);
+
+
 
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);

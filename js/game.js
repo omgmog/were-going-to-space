@@ -1,10 +1,16 @@
 var game = (function () {
   'use strict';
 
+  var core = {};
+  var utils = {};
+
+  var T = THREE; // Shorthand to THREE built-ins
+
+  core.spinningItem = null;
+
   /////////////////////////////////////////////////////////////////////////////
   //// UTILS
   /////////////////////////////////////////////////////////////////////////////
-  var utils = {};
 
   utils.pi = Math.PI;
   utils.tau =  Math.PI / 2;
@@ -16,7 +22,9 @@ var game = (function () {
     core.controls.update(delta);
     TWEEN.update();
     // Per frame stuff here
-
+    if (core.spinningItem) {
+      core.spinningItem.rotation.y += 0.01;
+    }
 
     core.renderer.render(core.scene, core.camera);
 
@@ -193,9 +201,6 @@ var game = (function () {
   /////////////////////////////////////////////////////////////////////////////
   //// CORE
   /////////////////////////////////////////////////////////////////////////////
-  var core = {};
-
-  var T = THREE; // Shorthand to THREE built-ins
 
   var init = function () {
     core.clock = new T.Clock();
