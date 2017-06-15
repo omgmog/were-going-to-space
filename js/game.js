@@ -167,6 +167,27 @@ var game = (function () {
     return items[Math.floor(Math.random() * items.length)];
   };
 
+  utils.changematerial = function (obj, mat) {
+    if (obj instanceof T.Mesh && mat != false) {
+      obj.userData.material = obj.material;
+      obj.material = mat;
+    }
+  };
+  utils.wireframeify = function (obj) {
+    var wf = new T.MeshBasicMaterial({color: utils.colors.light_green, wireframe: true});
+
+    utils.changematerial(obj, wf);
+    obj.traverse(function (child) {
+      utils.changematerial(child, wf);
+    });
+  };
+  utils.unwireframeify = function (obj) {
+    utils.changematerial(obj, obj.userData.material || false);
+    obj.traverse(function (child) {
+      utils.changematerial(child, child.userData.material || false);
+    });
+  };
+
 
 
   /////////////////////////////////////////////////////////////////////////////
