@@ -229,6 +229,63 @@ game.items = (function () {
       item.position.y = -6.5;
       return item;
     },
+    ufo: function () {
+      var item = new T.Object3D();
+
+      var body = utils.build(
+        'SphereGeometry', [1, 32, 16],
+        'MeshPhongMaterial', [{
+          color: utils.colors.light_green,
+        }]
+      );
+      body.scale.x = body.scale.z = 2;
+      body.scale.y = .5;
+
+      var bubble = utils.build(
+        'SphereGeometry', [1, 16, 8],
+        'MeshPhongMaterial', [{
+          color: utils.colors.white,
+          opacity: .8,
+          transparent: true,
+        }]
+      );
+      bubble.position.y = .75;
+
+      var leg = new T.Object3D();
+      var _leg = utils.build(
+        'CylinderGeometry', [.125, .125, 1],
+        'MeshPhongMaterial', [{
+          color: utils.colors.light_green,
+        }]
+      );
+      var _foot = utils.build(
+        'SphereGeometry', [.25, 8, 8],
+        'MeshPhongMaterial', [{
+          color: utils.colors.yellow,
+        }]
+      );
+      _foot.position.y = -.5;
+      utils.append([_leg, _foot], leg);
+
+      var legs = [];
+      for (var i=0; i<3; i++) {
+        var __leg = leg.clone();
+        __leg.position.x = Math.sin(utils.d2r(120) * i) * 1.25;
+        __leg.position.z = Math.cos(utils.d2r(120) * i) * 1.25;
+        __leg.position.y = -.5;
+        __leg.lookAt(new T.Vector3(0,-1.5,0));
+
+        legs.push(__leg);
+      }
+
+      utils.append(legs, item);
+
+      utils.append([body, bubble], item);
+
+      item.position.y = -5;
+
+      return item;
+    }
   };
 
   return {
@@ -236,5 +293,6 @@ game.items = (function () {
     cone: items.cone,
     dirtblock: items.dirtblock,
     printedsaveicons: items.printedsaveicons,
+    ufo: items.ufo,
   };
 }());

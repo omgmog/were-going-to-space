@@ -418,13 +418,13 @@
   }
   utils.append(cupboards, core.scene);
 
-
+  var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo'];
 
   // Stick some items on the shelves
   for (var i=0; i<cupboards.length; i++) {
     for (var j=0; j<cupboardProps.shelves; j++) {
       for (var k=0; k<3; k++) {
-        var _obj = game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock', 'printedsaveicons'])]().clone();
+        var _obj = game.items[utils.getRandomItem(items)]().clone();
         // utils.wireframeify(_obj);
         // utils.unwireframeify(_obj);
         utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
@@ -439,6 +439,8 @@
   var targetScreen = utils.getNamedObject(monitor, "screen");
 
   utils.append(targetItem, targetScreen);
+
+  // utils.append(game.items.ufo(), core.scene);
 
 
 
