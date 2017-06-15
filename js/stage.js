@@ -434,11 +434,13 @@
 
 
   // Stick some items on the shelves
-
   for (var i=0; i<cupboards.length; i++) {
     for (var j=0; j<cupboardProps.shelves; j++) {
       for (var k=0; k<3; k++) {
-        utils.append(game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock'])].clone(), utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
+        var _obj = game.items[utils.getRandomItem(['cone', 'gnome', 'dirtblock'])].clone();
+        // utils.wireframeify(_obj);
+        // utils.unwireframeify(_obj);
+        utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
       }
     }
   }
