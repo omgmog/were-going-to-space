@@ -32,7 +32,7 @@ game.items = (function () {
       );
       hat.rotation.x = utils.d2r(-15);
       var face = utils.build(
-        'SphereGeometry', [1, 16, 16],
+        'SphereGeometry', [1, 8, 8],
         'MeshPhongMaterial', [{
           color: utils.colors.yellow,
         }]
@@ -40,7 +40,7 @@ game.items = (function () {
       face.position.y = -2;
       face.position.z = .5;
       var eye = utils.build(
-        'SphereGeometry',[.125, 8, 8],
+        'SphereGeometry',[.125, 4, 4],
         'MeshPhongMaterial',[{
           color: utils.colors.black,
         }]
@@ -67,7 +67,7 @@ game.items = (function () {
       var body = new T.Object3D();
 
       var torso = utils.build(
-        'SphereGeometry', [1.5, 16, 8, 0, utils.pi],
+        'SphereGeometry', [1.5, 8, 4, 0, utils.pi],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_blue,
         }]
@@ -84,7 +84,7 @@ game.items = (function () {
         }]
       );
       var hand = utils.build(
-        'SphereGeometry', [.5, 8, 8],
+        'SphereGeometry', [.5, 4, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.yellow,
         }]
@@ -106,7 +106,7 @@ game.items = (function () {
       body.position.y = -4.5;
 
       var hips = utils.build(
-        'SphereGeometry', [1.5, 16, 8],
+        'SphereGeometry', [1.5, 8, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.brown,
         }]
@@ -122,7 +122,7 @@ game.items = (function () {
       );
 
       var foot = utils.build(
-        'SphereGeometry', [.5, 8, 8],
+        'SphereGeometry', [.5, 4, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.dark_gray,
         }]
@@ -151,7 +151,7 @@ game.items = (function () {
     cone: function () {
       var item = new T.Object3D();
       var cone = new utils.build(
-        'CylinderGeometry', [.6, 1.9, 5, 12],
+        'CylinderGeometry', [.6, 1.9, 5, 6],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
         }]
@@ -233,7 +233,7 @@ game.items = (function () {
       var item = new T.Object3D();
 
       var body = utils.build(
-        'SphereGeometry', [1, 32, 16],
+        'SphereGeometry', [1, 8, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.light_green,
         }]
@@ -242,7 +242,7 @@ game.items = (function () {
       body.scale.y = .5;
 
       var bubble = utils.build(
-        'SphereGeometry', [1, 16, 8],
+        'SphereGeometry', [1, 8, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.white,
           opacity: .8,
@@ -259,7 +259,7 @@ game.items = (function () {
         }]
       );
       var _foot = utils.build(
-        'SphereGeometry', [.25, 8, 8],
+        'SphereGeometry', [.25, 4, 4],
         'MeshPhongMaterial', [{
           color: utils.colors.yellow,
         }]
