@@ -208,8 +208,20 @@ var game = (function () {
     });
   };
 
-  utils.gaze = function (obj, over, out, tap, long) {
+  utils.gaze = function (obj, over, out, long) {
     // have the object react when user looks at it
+    obj.ongazeover = function (e) {
+      console.log('over (parent fn)');
+      over();
+    };
+    obj.ongazeout = function (e) {
+      console.log('out (parent fn)');
+      out();
+    };
+    obj.ongazelong = function (e) {
+      console.log('long (parent fn)');
+      long();
+    };
   };
 
   utils.enterVR = function () {
