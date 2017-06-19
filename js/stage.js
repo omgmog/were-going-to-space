@@ -215,14 +215,51 @@
 
     computer.position.y = 1;
     computer.position.x = 8;
+    var matdarkgray = new T.MeshPhongMaterial({color:utils.colors.dark_gray});
+    var matblack = new T.MeshPhongMaterial({color:utils.colors.black});
 
     var monitor = new T.Object3D();
-    var monitorShell = utils.build(
-      'BoxGeometry', [16, 12, 5],
+    var monitorShell = new T.Object3D();
+    var _monitorTop = utils.build(
+      'BoxGeometry', [16, 1, 8],
       'MeshPhongMaterial', [{
         color: utils.colors.dark_gray,
       }]
     );
+    _monitorTop.material = [matdarkgray, matdarkgray, matdarkgray, matblack, matdarkgray, matdarkgray];
+    _monitorTop.position.set(0,5.5,0);
+    var _monitorBottom = utils.build(
+      'BoxGeometry', [16, 1, 8],
+      'MeshPhongMaterial', [{}]
+    );
+    _monitorBottom.material = [matdarkgray, matdarkgray, matblack, matdarkgray, matdarkgray, matdarkgray];
+    _monitorBottom.position.set(0,-5.5,0);
+    var _monitorLeft = utils.build(
+      'BoxGeometry', [1, 12, 8],
+      'MeshPhongMaterial', [{
+        color: utils.colors.dark_gray,
+      }]
+    );
+    _monitorLeft.material = [matblack, matdarkgray, matdarkgray, matdarkgray, matdarkgray, matdarkgray];
+    _monitorLeft.position.set(-8,0,0);
+    var _monitorRight = utils.build(
+      'BoxGeometry', [1, 12, 8],
+      'MeshPhongMaterial', [{
+        color: utils.colors.dark_gray,
+      }]
+    );
+    _monitorRight.material = [matdarkgray, matblack, matdarkgray, matdarkgray, matdarkgray, matdarkgray];
+    _monitorRight.position.set(8,0,0);
+    var _monitorBack = utils.build(
+      'BoxGeometry', [16, 12, 1],
+      'MeshPhongMaterial', [{
+        color: utils.colors.dark_gray,
+      }]
+    );
+    _monitorBack.material = [matdarkgray, matdarkgray, matdarkgray, matdarkgray, matblack, matdarkgray];
+    _monitorBack.position.set(0,0,-4);
+    utils.append([_monitorTop,_monitorBottom,_monitorLeft,_monitorRight,_monitorBack], monitorShell);
+
     var monitorStand = utils.build(
       'CylinderGeometry', [2, 2, 2, 8],
       'MeshPhongMaterial', [{
@@ -232,12 +269,14 @@
     monitorStand.position.y = -7;
 
     var monitorScreen = utils.build(
-      'PlaneGeometry', [14, 10, 1],
+      'PlaneGeometry', [16, 12, 1],
       'MeshPhongMaterial', [{
         color: utils.colors.black,
+        opacity: 0.1,
+        transparent: true,
       }]
     );
-    monitorScreen.position.z = 2.6;
+    monitorScreen.position.z = 3.8;
     monitorScreen.name = "screen";
 
 
@@ -433,6 +472,7 @@
   var targetItem = (utils.getNamedObject(cupboards[1].children[1], "slot1")).clone();
   utils.wireframeify(targetItem);
   targetItem.position.y = 3.5;
+  targetItem.position.z = -2;
   core.spinningItem = targetItem;
 
   var targetScreen = utils.getNamedObject(monitor, "screen");
