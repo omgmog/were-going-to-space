@@ -130,6 +130,7 @@ var game = (function () {
 
   utils.debugAxis = function () {
     utils.append(new T.AxisHelper(100), core.scene);
+    utils.createCrosshair(core.camera);
   };
   utils.do = function (count, fn) {
     for (var i=0; i<count; i++) {
@@ -256,6 +257,37 @@ var game = (function () {
     });
   };
 
+  utils.createCrosshair = function (camera) {
+    var material = new THREE.LineBasicMaterial({ color: 0xAAFFAA });
+
+    // crosshair size
+    var x = 0.01, y = 0.01;
+
+    var geometry = new THREE.Geometry();
+
+    // crosshair
+    geometry.vertices.push(new THREE.Vector3(0, y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, -y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(x, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(-x, 0, 0));
+
+    var crosshair = new THREE.Line( geometry, material );
+
+    // place it in the center
+    var crosshairPercentX = 50;
+    var crosshairPercentY = 50;
+    var crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
+    var crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
+
+    crosshair.position.x = crosshairPositionX * camera.aspect;
+    crosshair.position.y = crosshairPositionY;
+
+    crosshair.position.z = -0.3;
+
+    camera.add( crosshair );
+  };
+
 
   /////////////////////////////////////////////////////////////////////////////
   //// CORE
@@ -297,6 +329,7 @@ var game = (function () {
     }
     core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
     core.camera.updateProjectionMatrix();
+    core.scene.add(core.camera);
 
     // Shadow setup
     core.renderer.shadowMap.enabled = true;
