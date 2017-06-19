@@ -149,7 +149,7 @@
   var maxWheels = Math.floor(conveyorProps.length / (conveyorProps.wheelSize * 4));
   var wheels = [];
 
-  utils.do(maxWheels, function (i) {
+  utils.do(maxWheels + 1, function (i) {
     var _wheel = wheel.clone();
     _wheel.position.x = ((conveyorProps.length/2) - conveyorProps.length) + (i * (conveyorProps.length / maxWheels));
     wheels.push(_wheel);
