@@ -41,9 +41,11 @@ var game = (function () {
   }
 
   utils.animate = function () {
-    requestAnimationFrame(utils.animate);
+    core.stats.begin();
     utils.update(core.clock.getDelta());
     utils.render(core.clock.getDelta());
+    core.stats.end();
+    requestAnimationFrame(utils.animate);
   };
 
   utils.append = function (things, parent) {
@@ -357,6 +359,10 @@ var game = (function () {
     // Initialise it
     window.addEventListener('resize', utils.onWindowResize, false);
     document.body.appendChild(core.renderer.domElement);
+
+    core.stats = new Stats();
+    core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( core.stats.dom );
 
     utils.setupVRMode();
 
