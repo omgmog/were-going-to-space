@@ -131,6 +131,11 @@ var game = (function () {
   utils.debugAxis = function () {
     utils.append(new T.AxisHelper(100), core.scene);
   };
+  utils.do = function (count, fn) {
+    for (var i=0; i<count; i++) {
+      fn(i);
+    }
+  };
 
   // return leg positions as x/z arrays
   utils.positionLegs = function (props) {

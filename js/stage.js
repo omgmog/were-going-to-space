@@ -101,11 +101,11 @@
   var wingsTotal = wings.length;
   var wingStep = utils.d2r(360 / wingsTotal);
 
-  for (var i=0; i<wingsTotal; i++) {
+  utils.do(wingsTotal, function (i) {
     wings[i] = wing.clone();
     wings[i].rotation.y = wingStep * i;
     wings[i].position.y = -75;
-  }
+  });
 
   utils.append(wings, rocket);
 
@@ -149,11 +149,11 @@
   var maxWheels = Math.floor(conveyorProps.length / (conveyorProps.wheelSize * 4));
   var wheels = [];
 
-  for (var i=0; i<=maxWheels; i++) {
+  utils.do(maxWheels, function (i) {
     var _wheel = wheel.clone();
     _wheel.position.x = ((conveyorProps.length/2) - conveyorProps.length) + (i * (conveyorProps.length / maxWheels));
     wheels.push(_wheel);
-  }
+  });
 
   utils.append(belts, conveyor);
   utils.append(wheels, conveyor);
@@ -198,7 +198,7 @@
   );
   var tableLegs = [];
 
-  for (var i=0; i<tableProps.legsCount; i++) {
+  utils.do(tableProps.legsCount, function (i) {
     var _tableLeg = tableLeg.clone();
     _tableLeg.position.set(
       utils.positionLegs(tableProps)[i][0],
@@ -206,7 +206,7 @@
       utils.positionLegs(tableProps)[i][1]
     );
     tableLegs.push(_tableLeg);
-  }
+  });
   utils.append(tableLegs, table);
 
     // computer
@@ -291,7 +291,7 @@
     var rowCount = 0;
     var colCount = 0;
 
-    for (var i=0; i<keyProps.total; i++) {
+    utils.do(keyProps.total, function (i) {
       var _key = key.clone();
       if (i % keyProps.wrap === 0) {
         rowCount++;
@@ -326,7 +326,7 @@
         _key = new T.Object3D();
       }
       keys.push(_key);
-    }
+    });
     utils.append(keys, keyboard);
 
 
@@ -358,7 +358,7 @@
     }]
   );
   var shelves = [];
-  for (var i=0; i <cupboardProps.shelves; i++) {
+  utils.do(cupboardProps.shelves, function (i) {
     var _shelf = shelf.clone();
     _shelf.position.y = 10 + (i * 10);
 
@@ -375,7 +375,7 @@
     _shelf.children[2].position.set(cupboardProps.width / 3, ypos, 0);
 
     shelves.push(_shelf);
-  }
+  })
   utils.append(shelves, cupboard);
 
 
@@ -386,14 +386,14 @@
     }]
   );
   var cupboardLegs = [];
-  for (var i=0; i <cupboardProps.legs; i++) {
+  utils.do(cupboardProps.legs, function (i) {
     var _cupboardLeg = cupboardLeg.clone();
     _cupboardLeg.position.y = (cupboardProps.height / 2);
     _cupboardLeg.position.x = utils.positionLegs(cupboardProps)[i][0];
     _cupboardLeg.position.z = utils.positionLegs(cupboardProps)[i][1];
 
     shelves.push(_cupboardLeg);
-  }
+  });
   utils.append(shelves, cupboard);
   utils.append(cupboardLegs, cupboard);
 
@@ -405,7 +405,7 @@
   var cupboardStep = utils.d2r(30);
   var cupboardAngle = utils.d2r(120);
 
-  for (var i=0; i<totalCupboards; i++) {
+  utils.do(totalCupboards, function (i) {
     var _cupboard = cupboard.clone();
     _cupboard.position.y = 1;
     _cupboard.position.x = Math.cos(cupboardAngle) * cupboardRadius;
@@ -415,22 +415,21 @@
 
     _cupboard.lookAt(new T.Vector3(0,0,0));
     cupboards.push(_cupboard);
-  }
+  })
   utils.append(cupboards, core.scene);
 
   var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo'];
 
   // Stick some items on the shelves
-  for (var i=0; i<cupboards.length; i++) {
-    for (var j=0; j<cupboardProps.shelves; j++) {
-      for (var k=0; k<3; k++) {
+  utils.do(cupboards.length, function (i) {
+    utils.do(cupboardProps.shelves, function (j) {
+      utils.do(3, function (k) {
         var _obj = game.items[utils.getRandomItem(items)]().clone();
-        // utils.wireframeify(_obj);
-        // utils.unwireframeify(_obj);
         utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
-      }
-    }
-  }
+      });
+    });
+  });
+
   var targetItem = (utils.getNamedObject(cupboards[1].children[1], "slot1")).clone();
   utils.wireframeify(targetItem);
   targetItem.position.y = 3.5;
