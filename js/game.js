@@ -20,11 +20,12 @@ var game = (function () {
   // graphics update
   utils.render = function (delta) {
     TWEEN.update();
-    core.controls.update(delta);
     // Per frame stuff here
     if (core.spinningItem) {
       core.spinningItem.rotation.y += 0.01;
     }
+
+    core.controls.update();
 
     core.renderer.render(core.scene, core.camera);
 
@@ -76,8 +77,7 @@ var game = (function () {
   };
 
   utils.onMobileDevice = function () {
-    try{ document.createEvent("TouchEvent"); return true; }
-    catch(e){ return false; }
+    return /Android/i.test(navigator.userAgent) || /iPhone|iPad|iPod/i.test(navigator.userAgent);
   };
 
   utils.onWindowResize = function () {
@@ -206,6 +206,50 @@ var game = (function () {
     // have the object react when user looks at it
   };
 
+  utils.enterVR = function () {
+    if (utils.onMobileDevice()) {
+      core.effect = new T.StereoEffect(core.renderer);
+      core.effect.setSize(window.innerWidth, window.innerHeight);
+      core.effect.separation = 2.5 * 0.0254 / 2;
+    }
+
+    vrbutton.style.display = 'none';
+  };
+  utils.exitVR = function () {
+    core.effect = null;
+    vrbutton.style.display = 'block';
+  };
+
+  utils.onvrbuttonpress = function () {
+    var canvas = document.querySelector('canvas');
+    if ('mozRequestFullScreen' in canvas) {
+      canvas.mozRequestFullScreen();
+    } else if ('webkitRequestFullScreen' in canvas){
+      canvas.webkitRequestFullScreen();
+    } else {
+      canvas.requestFullScreen();
+    }
+    utils.enterVR();
+  };
+
+  utils.setupVRMode = function () {
+    var vrbutton = document.createElement('button');
+    vrbutton.id = 'vrbutton';
+    document.body.appendChild(vrbutton);
+    vrbutton.innerText = `Enter ${utils.onMobileDevice()?'VR Mode':'Fullscreen'}`;
+    vrbutton.addEventListener('click', utils.onvrbuttonpress, false);
+    var fschangeEvents = ['webkitfullscreenchange', 'mozfullscreenchange', 'fullscreenchange'];
+    var fsactiveEvents = ['webkitIsFullScreen', 'mozFullScreen', 'fullscreen'];
+    fschangeEvents.forEach(function (event, i) {
+      if (`on${event}` in document) {
+        document.addEventListener(event, function (e) {
+          if (!document[fsactiveEvents[i]]) {
+            utils.exitVR();
+          }
+        });
+      }
+    });
+  };
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -219,6 +263,7 @@ var game = (function () {
     core.fov = 50; // fov in Three is vertical, so 40-50 vfov is about 70 in hfov
     core.camera = new T.PerspectiveCamera(core.fov, window.innerWidth / window.innerHeight, 0.1, core.distance);
     core.effect = null;
+    core.controls = null;
     core.scene = new T.Scene();
     core.scene.fog = new T.FogExp2(utils.colors.black, 0.001);
     core.renderer = new T.WebGLRenderer({
@@ -229,6 +274,24 @@ var game = (function () {
     core.renderer.setClearColor(core.scene.fog.color);
     core.renderer.setPixelRatio(window.devicePixelRatio);
     core.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    if (utils.haveHMD()) {
+      // get us in to a proper vr control then
+      console.log('hmd');
+      core.controls = new T.VRControls(core.camera, function (err) {console.error(err)});
+    } else if (utils.onMobileDevice()) {
+      // mobile
+      console.log('mobile');
+      core.controls = new T.DeviceOrientationControls(core.camera);
+    } else {
+      // everything else
+      console.log('pleb');
+      core.controls = new T.OrbitControls(core.camera);
+      core.camera.position.z += 0.01;
+      core.camera.rotation.x = utils.d2r(-90);
+    }
+    core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
+    core.camera.updateProjectionMatrix();
 
     // Shadow setup
     core.renderer.shadowMap.enabled = true;
@@ -241,29 +304,11 @@ var game = (function () {
     core.renderer.shadowMapWidth = 1024;
     core.renderer.shadowMapHeight = 1024;
 
-    if (utils.haveHMD()) {
-      core.controls = new T.VRControls(core.camera);
-      console.log('Using HMD');
-    } else if (utils.onMobileDevice()) {
-      core.effect = new T.StereoEffect(core.renderer);
-      core.controls = new T.DeviceOrientationControls(core.camera, true);
-      console.log('Using DeviceOrientationControls');
-    } else {
-      // OrbitControls for the peasants.
-      core.controls = new T.OrbitControls(core.camera, core.renderer.domElement);
-      console.log('Using mouse');
-    }
-    core.camera.position.y = core.cameraHeight;
-    if (typeof core.controls.userHeight !== "undefined") {
-      console.log("Setting camera height using userHeight");
-      core.camera.position.y = core.controls.userHeight;
-    }
-    core.camera.updateProjectionMatrix();
-
     // Initialise it
     window.addEventListener('resize', utils.onWindowResize, false);
     document.body.appendChild(core.renderer.domElement);
 
+    utils.setupVRMode();
 
 
     utils.animate();
