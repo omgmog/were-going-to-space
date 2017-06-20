@@ -474,7 +474,7 @@
   var targetItem = target.children[0].clone();
 
   utils.wireframeify(targetItem);
-  targetItem.position.y = 3.5;
+  targetItem.position.y = 0;
   targetItem.position.z = -2;
   core.spinningItem = targetItem;
 
