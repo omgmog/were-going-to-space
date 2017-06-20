@@ -359,14 +359,13 @@ var game = (function () {
       core.controls = new T.DeviceOrientationControls(core.camera);
     } else {
       // everything else
-      console.log('pleb');
+      console.log('standard browser');
       core.controls = new T.OrbitControls(core.camera);
       // core.camera.position.z += 0.01;
       // core.camera.rotation.x = utils.d2r(-90);
     }
-    // core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
+    core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
     core.camera.updateProjectionMatrix();
-    core.camera.position.y = 100;
     core.scene.add(core.camera);
 
     // Shadow setup

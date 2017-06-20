@@ -20,7 +20,7 @@
       side: T.DoubleSide,
     }]
   );
-  floor.position.y = 0;
+  floor.position.y = -20;
   floor.rotation.x = utils.tau;
 
   utils.append(floor, core.scene);
@@ -39,7 +39,7 @@
 
   // rocket
   var rocket = new T.Object3D();
-  rocket.position.set(-130, 125, -97);
+  rocket.position.set(-130, 105, -97);
   // rocket.position.set(0, 125, 0);
   // rocket.rotation.set(0, 19.9, 0); // do this with matrix transform?
   rocket.rotation.y = utils.d2r(45);
@@ -123,7 +123,7 @@
   };
   // Could this be done with a matrix transform?
   conveyor.rotation.set(0, -.2, -.1);
-  conveyor.position.set(-30, 23, -77);
+  conveyor.position.set(-30, 3, -77);
 
   var belt = utils.build(
     'BoxGeometry', [conveyorProps.length, 1, conveyorProps.width],
@@ -174,7 +174,7 @@
     legsCount: 4,
     color: utils.colors.light_gray,
   };
-  table.position.y = tableProps.height;
+  table.position.y = tableProps.height - 20;
   table.position.z = -40;
   table.position.x = -20;
 
@@ -446,13 +446,13 @@
 
   utils.do(totalCupboards, function (i) {
     var _cupboard = cupboard.clone();
-    _cupboard.position.y = 1;
+    _cupboard.position.y = -20;
     _cupboard.position.x = Math.cos(cupboardAngle) * cupboardRadius;
     _cupboard.position.z = Math.sin(cupboardAngle) * cupboardRadius;
 
     cupboardAngle += cupboardStep;
 
-    _cupboard.lookAt(new T.Vector3(0,0,0));
+    _cupboard.lookAt(new T.Vector3(0,-20,0));
     cupboards.push(_cupboard);
   })
   utils.append(cupboards, core.scene);
