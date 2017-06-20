@@ -484,16 +484,15 @@
 
   // example of gaze
   utils.gaze(
-    target.children[0],
+    utils.getChildren(cupboards),
     function (obj) {
-      obj.scale.set(2, 2, 2);
-      utils.wireframeify(obj);
+      console.log('over', obj.name);
     },
     function (obj) {
-      utils.unwireframeify(obj);
+      console.log('out', obj.name);
     },
     function (obj) {
-      console.log('long');
+      console.log('long', obj.name);
     }
   );
 

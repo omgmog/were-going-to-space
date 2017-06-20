@@ -183,6 +183,23 @@ var game = (function () {
   utils.getNamedObject = function (parent, name) {
     return parent.getObjectByName(name);
   }
+  utils.getChildren = function (parents) {
+    var children = [];
+    if (!(parents instanceof Array)) {
+      parents = [parents];
+    }
+
+    parents.forEach(function (parent) {
+      parent.traverse(function (child) {
+        // only get named children, also not slot* objects
+        if (child.name && !child.name.match(/^slot/)) {
+          children.push(child);
+        }
+      });
+    });
+    console.log(children);
+    return children;
+  }
 
   utils.getRandomItem = function (items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -310,18 +327,25 @@ var game = (function () {
     }
   };
 
-  utils.gaze = function (obj, over, out, long) {
+  utils.gaze = function (objects, over, out, long) {
     // have the object react when user looks at it
-    obj.ongazeover = function (e) {
-      over(obj);
-    };
-    obj.ongazeout = function (e) {
-      out(obj);
-    };
-    obj.ongazelong = function (e) {
-      long(obj);
-    };
-    core.interacts.push(obj);
+    if (!(objects instanceof Array)) {
+      objects = [objects];
+    }
+    objects.forEach(function (obj) {
+      obj.ongazeover = function (e) {
+        over(obj);
+      };
+      obj.ongazeout = function (e) {
+        out(obj);
+      };
+      obj.ongazelong = function (e) {
+        long(obj);
+      };
+      obj.updateMatrixWorld();
+      core.interacts.push(obj);
+    });
+
   };
 
 
