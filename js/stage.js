@@ -6,18 +6,15 @@
   var core = game.core;
   var items = game.items;
 
-  utils.debugAxis();
+  // utils.debugAxis();
 
   // floor
-  var floorTexture = new T.TextureLoader().load('assets/dn.jpg');
-  floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-  floorTexture.repeat.set(8, 8);
 
   var floor = utils.build(
-    'PlaneGeometry', [3000, 3000, 10, 10],
+    'CircleGeometry', [300, 300, 10, 10],
     'MeshLambertMaterial', [{
-      map: floorTexture,
       side: T.DoubleSide,
+      color: utils.colors.black,
     }]
   );
   floor.position.y = -20;
