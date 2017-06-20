@@ -336,12 +336,22 @@ var game = (function () {
       core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
 
       // show hide floor marker
+      core.rayfloor.material.opacity = 0.6;
       if (intersects[0].object.name == "floor") {
+        core.rayfloor.rotation.set(-utils.tau, 0, 0);
         core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y + .1, intersects[0].point.z);
-        core.rayfloor.material.opacity = 0.6;
+        core.rayfloor.scale.set(1,1,1);
       } else {
-        core.rayfloor.material.opacity = 0;
+        // core.rayfloor.material.opacity = 0;
+        core.rayfloor.rotation.x = 0;
+        core.rayfloor.lookAt(core.camera.position);
+        core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+        core.rayfloor.scale.set(.5, .5, .5);
       }
+    } else {
+      core.rayfloor.scale.set(1,1,1);
+      core.rayfloor.material.opacity = 0;
+      core.rayfloor.rotation.set(0,0,0);
     }
   };
 
@@ -401,7 +411,6 @@ var game = (function () {
         opacity: 0
       }]
     );
-    core.rayfloor.rotation.x = -utils.tau;
     utils.append([core.rayfloor], core.scene);
 
     if (utils.haveHMD()) {
