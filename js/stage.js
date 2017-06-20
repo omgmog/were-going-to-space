@@ -22,6 +22,7 @@
   );
   floor.position.y = -20;
   floor.rotation.x = utils.tau;
+  floor.name = "floor";
 
   utils.append(floor, core.scene);
 
@@ -483,6 +484,7 @@
 
 
   // example of gaze
+  utils.gaze(utils.getNamedObject(core.scene, 'floor'),function(){},function(){},function(){});
   utils.gaze(
     utils.getChildren(cupboards),
     function (obj) {

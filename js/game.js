@@ -290,6 +290,7 @@ var game = (function () {
   core.rayTimeout = 2500; // 2.5s in ms
   core.rayOld = 0;
 
+  core.vibrate = navigator.vibrate ? navigator.vibrate.bind(navigator) : function () {};
   utils.updateRaycaster = function () {
     core.rayNow = Date.now();
     core.rayDelta = core.rayNow - core.rayThen;
@@ -305,28 +306,41 @@ var game = (function () {
       // do we want this or it's parent?
       var target = intersects[0].object;
       while (!(target instanceof T.Group)) {
+        if (target.name === 'floor') break;
         target = target.parent;
       }
 
-      if (core.INTERSECTED != target) {
-        core.INTERSECTED = target;
-        if (typeof core.INTERSECTED.ongazeover === 'function') {
-          core.INTERSECTED.ongazeover();
+      if (target.userData.gazeable) {
+        if (core.INTERSECTED != target) {
+          core.INTERSECTED = target;
+          if (typeof core.INTERSECTED.ongazeover === 'function') {
+            core.INTERSECTED.ongazeover();
+            core.vibrate(50);
+          }
+        } else {
+          if (core.rayDelta >= core.rayTimeout) {
+            if (typeof core.INTERSECTED.ongazelong === 'function') {
+              core.INTERSECTED.ongazelong();
+              core.vibrate(100, 50);
+            }
+          }
         }
       } else {
-        if (core.rayDelta > core.rayTimeout) {
-          if (typeof core.INTERSECTED.ongazelong === 'function') {
-            core.INTERSECTED.ongazelong();
+        if (core.INTERSECTED) {
+          if (typeof core.INTERSECTED.ongazeout === 'function') {
+            core.INTERSECTED.ongazeout();
           }
-          core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
+          core.INTERSECTED = null;
         }
       }
-    } else {
-      if (core.INTERSECTED) {
-        if (typeof core.INTERSECTED.ongazeout === 'function') {
-          core.INTERSECTED.ongazeout();
-        }
-        core.INTERSECTED = null;
+      core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
+
+      // show hide floor marker
+      if (intersects[0].object.name == "floor") {
+        core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y + .1, intersects[0].point.z);
+        core.rayfloor.material.opacity = 0.6;
+      } else {
+        core.rayfloor.material.opacity = 0;
       }
     }
   };
@@ -347,6 +361,7 @@ var game = (function () {
         long(obj);
       };
       obj.updateMatrixWorld();
+      obj.userData.gazeable = true;
       core.interacts.push(obj);
     });
 
@@ -376,6 +391,18 @@ var game = (function () {
     core.renderer.setClearColor(core.scene.fog.color);
     core.renderer.setPixelRatio(window.devicePixelRatio);
     core.renderer.setSize(window.innerWidth, window.innerHeight);
+
+
+    core.rayfloor = utils.build(
+      'RingGeometry', [6, 10, 24, 1],
+      'MeshPhongMaterial', [{
+        color: utils.colors.light_red,
+        transparent: true,
+        opacity: 0
+      }]
+    );
+    core.rayfloor.rotation.x = -utils.tau;
+    utils.append([core.rayfloor], core.scene);
 
     if (utils.haveHMD()) {
       // get us in to a proper vr control then
