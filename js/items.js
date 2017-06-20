@@ -22,6 +22,7 @@ game.items = (function () {
   var items = {
     gnome: function () {
       var item = new T.Object3D();
+      item.name = "gnome";
 
       var head = new T.Object3D();
       var hat = utils.build(
@@ -150,6 +151,7 @@ game.items = (function () {
     },
     cone: function () {
       var item = new T.Object3D();
+      item.name = "cone";
       var cone = new utils.build(
         'CylinderGeometry', [.6, 1.9, 5, 6],
         'MeshPhongMaterial', [{
@@ -170,6 +172,7 @@ game.items = (function () {
     },
     dirtblock: function () {
       var item = new T.Object3D();
+      item.name = "dirtblock";
 
       var dirtblock = _items._cube().clone();
       dirtblock.scale.set(4,4,4);
@@ -197,6 +200,7 @@ game.items = (function () {
     },
     printedsaveicons: function () {
       var item = new T.Object3D();
+      item.name = "printedsaveicons";
 
       var diskThickness = .2;
       var disk = utils.build(
@@ -231,6 +235,7 @@ game.items = (function () {
     },
     ufo: function () {
       var item = new T.Object3D();
+      item.name = "ufo";
 
       var body = utils.build(
         'SphereGeometry', [1, 8, 4],

@@ -26,7 +26,6 @@ var game = (function () {
     }
 
     core.controls.update();
-
     core.renderer.render(core.scene, core.camera);
 
     // if we've got an effect, render it
@@ -44,6 +43,7 @@ var game = (function () {
     core.stats.begin();
     utils.update(core.clock.getDelta());
     utils.render(core.clock.getDelta());
+    utils.updateRaycaster();
     core.stats.end();
     requestAnimationFrame(utils.animate);
   };
@@ -210,22 +210,6 @@ var game = (function () {
     });
   };
 
-  utils.gaze = function (obj, over, out, long) {
-    // have the object react when user looks at it
-    obj.ongazeover = function (e) {
-      console.log('over (parent fn)');
-      over();
-    };
-    obj.ongazeout = function (e) {
-      console.log('out (parent fn)');
-      out();
-    };
-    obj.ongazelong = function (e) {
-      console.log('long (parent fn)');
-      long();
-    };
-  };
-
   utils.enterVR = function () {
     if (utils.onMobileDevice()) {
       core.effect = new T.StereoEffect(core.renderer);
@@ -302,6 +286,76 @@ var game = (function () {
     camera.add( crosshair );
   };
 
+  utils.setupRaycaster = function () {
+    core.raycaster = new T.Raycaster();
+    core.arrow = new T.ArrowHelper(
+      core.raycaster.ray.direction,
+      core.raycaster.ray.origin,
+      500,
+      utils.colors.light_red
+    );
+    core.scene.add(core.arrow);
+  };
+
+  core.intersectedObject = null;
+  core.INTERSECTED = null;
+  core.rayNow = 0;
+  core.rayDelta = 0;
+  core.rayThen = Date.now();
+  core.rayTimeout = 2500; // 2.5s in ms
+  core.rayOld = 0;
+
+  utils.updateRaycaster = function () {
+    core.rayNow = Date.now();
+    core.rayDelta = core.rayNow - core.rayThen;
+
+    core.arrow.setDirection(core.raycaster.ray.direction);
+    core.raycaster.set(core.camera.getWorldPosition(), core.camera.getWorldDirection());
+
+    var intersects = core.raycaster.intersectObjects(core.interacts, true);
+
+    core.intersectedObject = intersects;
+
+    if (intersects.length > 0) {
+
+      if (core.INTERSECTED != intersects[0].object) {
+        core.INTERSECTED = intersects[0].object;
+        if (typeof core.INTERSECTED.parent.ongazeover === 'function') {
+          core.INTERSECTED.parent.ongazeover();
+        }
+      } else {
+        if (core.rayDelta > core.rayTimeout) {
+          if (typeof core.INTERSECTED.parent.ongazelong === 'function') {
+            core.INTERSECTED.parent.ongazelong();
+          }
+          core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
+        }
+      }
+    } else {
+      if (core.INTERSECTED) {
+        if (typeof core.INTERSECTED.parent.ongazeout === 'function') {
+          core.INTERSECTED.parent.ongazeout();
+        }
+        core.INTERSECTED = null;
+      }
+    }
+  };
+
+  utils.gaze = function (obj, over, out, long) {
+    // have the object react when user looks at it
+    obj.ongazeover = function (e) {
+      over(obj);
+    };
+    obj.ongazeout = function (e) {
+      out(obj);
+    };
+    obj.ongazelong = function (e) {
+      long(obj);
+    };
+    core.interacts.push(obj);
+  };
+
+
 
   /////////////////////////////////////////////////////////////////////////////
   //// CORE
@@ -338,11 +392,12 @@ var game = (function () {
       // everything else
       console.log('pleb');
       core.controls = new T.OrbitControls(core.camera);
-      core.camera.position.z += 0.01;
-      core.camera.rotation.x = utils.d2r(-90);
+      // core.camera.position.z += 0.01;
+      // core.camera.rotation.x = utils.d2r(-90);
     }
-    core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
+    // core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
     core.camera.updateProjectionMatrix();
+    core.camera.position.y = 100;
     core.scene.add(core.camera);
 
     // Shadow setup
@@ -355,6 +410,12 @@ var game = (function () {
     core.renderer.shadowMapDarkness = 0.5;
     core.renderer.shadowMapWidth = 1024;
     core.renderer.shadowMapHeight = 1024;
+
+    core.raycaster = null;
+    core.arrow = null;
+    core.interacts = [];
+    utils.setupRaycaster();
+
 
     // Initialise it
     window.addEventListener('resize', utils.onWindowResize, false);

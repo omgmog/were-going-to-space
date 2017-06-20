@@ -469,7 +469,9 @@
     });
   });
 
-  var targetItem = (utils.getNamedObject(cupboards[1].children[1], "slot1")).clone();
+  var target = utils.getNamedObject(cupboards[1].children[1], "slot1");
+  var targetItem = target.children[0].clone();
+
   utils.wireframeify(targetItem);
   targetItem.position.y = 3.5;
   targetItem.position.z = -2;
@@ -479,9 +481,21 @@
 
   utils.append(targetItem, targetScreen);
 
-  // utils.append(game.items.ufo(), core.scene);
 
-
+  // example of gaze
+  utils.gaze(
+    target.children[0],
+    function (obj) {
+      obj.scale.set(2, 2, 2);
+      utils.wireframeify(obj);
+    },
+    function (obj) {
+      utils.unwireframeify(obj);
+    },
+    function (obj) {
+      console.log('long');
+    }
+  );
 
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);
