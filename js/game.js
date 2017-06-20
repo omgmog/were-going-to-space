@@ -272,14 +272,14 @@ var game = (function () {
 
   utils.setupRaycaster = function () {
     core.raycaster = new T.Raycaster();
-    core.arrow = new T.ArrowHelper(
-      core.raycaster.ray.direction,
-      core.raycaster.ray.origin,
-      200,
-      utils.colors.light_red,
-      20
-    );
-    core.scene.add(core.arrow);
+    // core.arrow = new T.ArrowHelper(
+    //   core.raycaster.ray.direction,
+    //   core.raycaster.ray.origin,
+    //   200,
+    //   utils.colors.light_red,
+    //   20
+    // );
+    // core.scene.add(core.arrow);
   };
 
   core.intersectedObject = null;
@@ -295,7 +295,7 @@ var game = (function () {
     core.rayNow = Date.now();
     core.rayDelta = core.rayNow - core.rayThen;
 
-    core.arrow.setDirection(core.raycaster.ray.direction);
+    // core.arrow.setDirection(core.raycaster.ray.direction);
     core.raycaster.set(core.camera.getWorldPosition(), core.camera.getWorldDirection());
 
     var intersects = core.raycaster.intersectObjects(core.interacts, true);
@@ -336,7 +336,7 @@ var game = (function () {
       core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
 
       // show hide floor marker
-      core.rayfloor.material.opacity = 0.6;
+      core.rayfloor.material.opacity = .6;
       if (intersects[0].object.name == "floor") {
         core.rayfloor.rotation.set(-utils.tau, 0, 0);
         core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y + .1, intersects[0].point.z);
@@ -346,7 +346,8 @@ var game = (function () {
         core.rayfloor.rotation.x = 0;
         core.rayfloor.lookAt(core.camera.position);
         core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-        core.rayfloor.scale.set(.5, .5, .5);
+        core.rayfloor.scale.set(.7, .7, .7);
+        core.rayfloor.material.opacity = .9;
       }
     } else {
       core.rayfloor.scale.set(1,1,1);
@@ -404,9 +405,9 @@ var game = (function () {
 
 
     core.rayfloor = utils.build(
-      'RingGeometry', [6, 10, 24, 1],
+      'RingGeometry', [6, 8, 24, 1],
       'MeshPhongMaterial', [{
-        color: utils.colors.light_red,
+        color: utils.colors.yellow,
         transparent: true,
         opacity: 0
       }]
@@ -444,7 +445,7 @@ var game = (function () {
     core.renderer.shadowMapHeight = 1024;
 
     core.raycaster = null;
-    core.arrow = null;
+    // core.arrow = null;
     core.interacts = [];
     utils.setupRaycaster();
 
