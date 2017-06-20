@@ -175,7 +175,7 @@ var game = (function () {
   };
 
   utils.namedObject = function (name) {
-    var _object = new T.Object3D();
+    var _object = new T.Group();
     _object.name = name;
     return _object;
   };
@@ -197,7 +197,6 @@ var game = (function () {
         }
       });
     });
-    console.log(children);
     return children;
   }
 
@@ -303,24 +302,29 @@ var game = (function () {
     core.intersectedObject = intersects;
 
     if (intersects.length > 0) {
+      // do we want this or it's parent?
+      var target = intersects[0].object;
+      while (!(target instanceof T.Group)) {
+        target = target.parent;
+      }
 
-      if (core.INTERSECTED != intersects[0].object) {
-        core.INTERSECTED = intersects[0].object;
-        if (typeof core.INTERSECTED.parent.ongazeover === 'function') {
-          core.INTERSECTED.parent.ongazeover();
+      if (core.INTERSECTED != target) {
+        core.INTERSECTED = target;
+        if (typeof core.INTERSECTED.ongazeover === 'function') {
+          core.INTERSECTED.ongazeover();
         }
       } else {
         if (core.rayDelta > core.rayTimeout) {
-          if (typeof core.INTERSECTED.parent.ongazelong === 'function') {
-            core.INTERSECTED.parent.ongazelong();
+          if (typeof core.INTERSECTED.ongazelong === 'function') {
+            core.INTERSECTED.ongazelong();
           }
           core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
         }
       }
     } else {
       if (core.INTERSECTED) {
-        if (typeof core.INTERSECTED.parent.ongazeout === 'function') {
-          core.INTERSECTED.parent.ongazeout();
+        if (typeof core.INTERSECTED.ongazeout === 'function') {
+          core.INTERSECTED.ongazeout();
         }
         core.INTERSECTED = null;
       }
