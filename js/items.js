@@ -182,8 +182,7 @@ game.items = (function () {
       var mats = [];
       for (var i=0; i<textures.length;i++) {
         var texture = new T.TextureLoader().load(textures[i]);
-        texture.anisotropy = core.renderer.getMaxAnisotropy();
-        mats.push(new T.MeshPhongMaterial({
+        mats.push(new T.MeshBasicMaterial({
           color: utils.colors.white,
           map: texture,
         }));
@@ -192,6 +191,24 @@ game.items = (function () {
 
       utils.append(dirtblock, item);
       item.position.y = -4.5;
+      item.rotation.y = utils.d2r(45);
+      return item;
+    },
+    crate: function () {
+      var item = utils.namedObject("crate");
+
+      var crate = _items._cube().clone();
+      crate.scale.set(8,8,8);
+
+      var texture = new T.TextureLoader().load('assets/crate.png');
+
+      crate.material = new T.MeshBasicMaterial({
+        color: utils.colors.white,
+        map: texture,
+      });
+
+      utils.append(crate, item);
+      item.position.y = -2.5;
       item.rotation.y = utils.d2r(45);
       return item;
     },
@@ -294,6 +311,7 @@ game.items = (function () {
     gnome: items.gnome,
     cone: items.cone,
     dirtblock: items.dirtblock,
+    crate: items.crate,
     printedsaveicons: items.printedsaveicons,
     ufo: items.ufo,
   };

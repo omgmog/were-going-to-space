@@ -457,7 +457,7 @@
   })
   utils.append(cupboards, core.scene);
 
-  var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo'];
+  var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo', 'crate'];
 
   // Stick some items on the shelves
   utils.do(cupboards.length, function (i) {
