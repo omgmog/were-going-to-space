@@ -215,28 +215,37 @@ game.items = (function () {
     printedsaveicons: function () {
       var item = utils.namedObject("printedsaveicons");
 
-      var diskThickness = .2;
+      var textures = [
+        new T.MeshPhongMaterial({color:0x23373f}),
+        new T.MeshPhongMaterial({color:0x23373f}),
+        new T.MeshPhongMaterial({color:utils.colors.white, map: new T.TextureLoader().load('assets/floppyt.jpg')}),
+        new T.MeshPhongMaterial({color:utils.colors.white, map: new T.TextureLoader().load('assets/floppyb.jpg')}),
+        new T.MeshPhongMaterial({color:0x23373f}),
+        new T.MeshPhongMaterial({color:0x23373f})
+      ]
+
+      var diskThickness = .1;
+      var scale = 2;
+      var numDisks = 15;
+
       var disk = utils.build(
         'BoxGeometry', [2, diskThickness, 2],
-        'MeshPhongMaterial', [{
-          color: utils.colors.white,
-          map: new T.TextureLoader().load('assets/floppy.png')
-        }]
+        'MeshPhongMaterial', [{}]
       );
+      disk.material = textures;
+      disk.scale.set(scale,scale,scale);
 
       var disks = [];
-      var numDisks = 10;
       for (var i=0; i<numDisks;i++) {
         var _disk = disk.clone();
         _disk.rotation.y = utils.getRandomItem([.1, .5, .3, .25, -.1]) * i;
-        _disk.position.y = (i + 1) * diskThickness;
+        _disk.position.y = (i + 1) * (diskThickness * scale);
         disks.push(_disk);
       }
       var solodisk = disk.clone();
-      solodisk.rotation.x = utils.d2r(-15);
-      solodisk.rotation.z = utils.d2r(45);
-      solodisk.position.y = 1;
-      solodisk.position.x = -2;
+      solodisk.rotation.set(0, utils.d2r(4), utils.d2r(-107));
+      solodisk.position.y = 2;
+      solodisk.position.x = -3;
 
       disks.push(solodisk);
 
@@ -244,6 +253,7 @@ game.items = (function () {
 
       // utils.append(diskette, item);
       item.position.y = -6.5;
+      item.rotation.y = utils.pi * .75;
       return item;
     },
     ufo: function () {
