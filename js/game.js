@@ -259,8 +259,9 @@ var game = (function () {
     core.arrow = new T.ArrowHelper(
       core.raycaster.ray.direction,
       core.raycaster.ray.origin,
-      500,
-      utils.colors.light_red
+      200,
+      utils.colors.light_red,
+      20
     );
     core.scene.add(core.arrow);
   };
