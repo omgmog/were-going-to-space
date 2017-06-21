@@ -282,6 +282,21 @@ var game = (function () {
     // );
     // core.scene.add(core.arrow);
   };
+  utils.destroy = function (obj) {
+    if (core.scene.getObjectById(obj.id, true)) {
+      obj.parent.remove(obj);
+    }
+  };
+  utils.inspect = function (obj) {
+    var newObject = obj.clone();
+    newObject.userData.oldposition = obj.position;
+    newObject.position.set(0,0,-25);
+    newObject.rotation.set(utils.d2r(-10),0,0);
+    newObject.userData.inspecting = true;
+    utils.append(newObject, core.camera);
+
+    utils.destroy(obj);
+  };
 
   core.intersectedObject = null;
   core.INTERSECTED = null;

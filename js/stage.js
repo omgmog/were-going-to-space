@@ -373,6 +373,20 @@
 
 
     // paper
+    var paper = utils.namedObject("paper");
+    var _page = utils.build(
+      'PlaneGeometry', [10,15,1],
+      'MeshPhongMaterial', [{
+        side: T.DoubleSide,
+        map: new T.TextureLoader().load('assets/paper.jpg'),
+      }]
+    );
+    paper.rotation.x = -utils.tau;
+    paper.position.y = 1;
+    paper.position.x = -8;
+    paper.rotation.z = utils.d2r(10);
+    utils.append(_page, paper);
+    utils.append(paper, table);
 
     utils.append(table, core.scene);
 
@@ -494,6 +508,13 @@
       console.log('long', obj.name);
     }
   );
+
+  utils.gaze(paper, function (){}, function (){}, function (obj) {
+    if (obj.userData && obj.userData.inspecting) {
+      return;
+    }
+    utils.inspect(obj);
+  });
 
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);
