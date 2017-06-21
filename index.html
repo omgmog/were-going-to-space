@@ -4,22 +4,106 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>We're Going to Space!</title>
+  <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
   <style>
+  * {
+    box-sizing: border-box; user-select: none;
+    cursor: crosshair;
+  }
     html,body {width: 100%; height: 100%; overflow: hidden; margin: 0;padding: 0;background: #000;}
-    #vrbutton {
+    .btn {
       background: transparent;
       border: currentColor 2px solid;
       color: rgba(255,255,255,.8);
       padding: .5em 1em;
-      font-size: 20px;
+      font-size: 1.5vw;
       outline: none;
+      text-transform: uppercase;
+      font-family: sans-serif;
+      line-height: 1;
+    }
+    #vrbutton {
       position: fixed;
       right: 1em;
       bottom: 1em;
     }
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      background-image: url(assets/background.jpg);
+      background-size: cover;
+      opacity: 0;
+      transition: .5s;
+      color: #fff;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .overlay.visible {
+      opacity: 1;
+    }
+    h1 {
+      font-family: Satisfy, sans-serif;
+      font-size: 12vw;
+      flex-direction: column;
+      font-weight: normal;
+      margin: 1em 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+    h1 span {
+      display: block;
+
+    }
+    .l1, .l2 {
+
+    }
+    .l1 {
+      font-size: .4em;
+      transform: rotate(-5deg);
+      margin-top: 1em;
+      margin-left: -1.5em;
+    }
+    .l2 {
+      font-size: 1em;
+      transform: rotate(-10deg);
+      margin-top: -.45em;
+      margin-left: .5em;
+      margin-bottom: -.5em;
+    }
+    .overlay h1 .btn {
+      display: inline-block;
+      clear: both;
+      animation: pulse 1s infinite forwards;
+    }
+    .action {
+      display: inline;
+    }
+
+    @keyframes pulse {
+      0, 100% {
+        transform: scale(1) rotate(-2deg);
+      }
+      50% {
+        transform: scale(1.1) rotate(2deg);
+      }
+    }
     </style>
 </head>
 <body>
+  <div class="overlay visible">
+    <h1>
+      <span class="l1">We're Going to</span><span class="l2">Space!</span>
+      <span class="btn"><span class="action">Click</span> to continue</span>
+    </h1>
+
+  </div>
   <script src="js/three.min.js"></script>
   <script src="js/stats.min.js"></script>
   <script src="js/OrbitControls.js"></script>

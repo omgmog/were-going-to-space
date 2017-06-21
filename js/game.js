@@ -254,6 +254,7 @@ var game = (function () {
   utils.setupVRMode = function () {
     var vrbutton = document.createElement('button');
     vrbutton.id = 'vrbutton';
+    vrbutton.classList.add('btn');
     document.body.appendChild(vrbutton);
     vrbutton.innerText = `Enter ${utils.onMobileDevice()?'VR Mode':'Fullscreen'}`;
     vrbutton.addEventListener('click', utils.onvrbuttonpress, false);
@@ -379,12 +380,46 @@ var game = (function () {
   };
 
 
+  utils.showMenu = function () {
+    var overlay = document.querySelector('.overlay');
+    overlay.querySelector('.btn .action').innerText = utils.onMobileDevice()? 'Touch' : 'Click';
+
+    overlay.addEventListener('click', function (e) {
+      // when clicked, do the following
+      utils.startGame();
+      overlay.classList.remove('visible');
+
+    });
+
+
+  };
+
+
+  utils.startGame = function () {
+
+      core.stats = new Stats();
+      core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild( core.stats.dom );
+
+      utils.setupRaycaster();
+      utils.setupVRMode();
+
+      utils.animate();
+  };
 
   /////////////////////////////////////////////////////////////////////////////
   //// CORE
   /////////////////////////////////////////////////////////////////////////////
+  core.phases = [
+    'menu',
+    'level1',
+    'level2',
+    'finish'
+  ];
 
   var init = function () {
+    core.interacts = [];
+    core.currentGamePhase = 0; // menu phase
     core.clock = new T.Clock();
     core.cameraHeight = 50;
     core.distance = 2000;
@@ -445,23 +480,16 @@ var game = (function () {
     core.renderer.shadowMapHeight = 1024;
 
     core.raycaster = null;
-    // core.arrow = null;
-    core.interacts = [];
-    utils.setupRaycaster();
 
 
     // Initialise it
     window.addEventListener('resize', utils.onWindowResize, false);
     document.body.appendChild(core.renderer.domElement);
 
-    core.stats = new Stats();
-    core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild( core.stats.dom );
+    // do something here to present overlay
 
-    utils.setupVRMode();
+    utils.showMenu();
 
-
-    utils.animate();
   };
 
   init();
