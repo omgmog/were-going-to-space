@@ -289,11 +289,28 @@ var game = (function () {
   };
   utils.inspect = function (obj) {
     var newObject = obj.clone();
-    newObject.userData.oldposition = obj.position;
-    newObject.position.set(0,0,-25);
-    newObject.rotation.set(utils.d2r(-10),0,0);
     newObject.userData.inspecting = true;
+    newObject.userData.oldposition = obj.position;
+
+    var oldPosition = {
+      x: 0,
+      y: 0,
+      z: -100,
+    };
+    var newPosition = {
+      x: 0,
+      y: 0,
+      z: -25,
+    };
+
+    newObject.rotation.set(utils.d2r(-10),0,0);
     utils.append(newObject, core.camera);
+
+    var positionTween = new TWEEN.Tween(oldPosition).to(newPosition, 500);
+    positionTween.onUpdate(function() {
+      newObject.position.set(oldPosition.x, oldPosition.y, oldPosition.z);
+    });
+    positionTween.start();
 
     utils.destroy(obj);
   };
