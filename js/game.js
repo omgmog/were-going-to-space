@@ -394,16 +394,16 @@ var game = (function () {
 
   };
 
-
   utils.showMenu = function () {
     var overlay = document.querySelector('.overlay');
     overlay.querySelector('.btn .action').innerText = utils.onMobileDevice()? 'Touch' : 'Click';
 
     overlay.addEventListener('click', function (e) {
       // when clicked, do the following
-      utils.startGame();
-      overlay.classList.remove('visible');
-
+      if (core.currentGamePhase === 0) {
+        utils.startGame();
+        overlay.classList.remove('visible');
+      }
     });
 
 
@@ -411,7 +411,8 @@ var game = (function () {
 
 
   utils.startGame = function () {
-
+      console.log('start game!');
+      core.currentGamePhase++;
       core.stats = new Stats();
       core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild( core.stats.dom );
