@@ -22,6 +22,8 @@
   floor.name = "floor";
 
   utils.append(floor, core.scene);
+  // setup floor gaze rejection
+  utils.gaze(utils.getNamedObject(core.scene, 'floor'));
 
 
   // sky
@@ -509,6 +511,9 @@
 
   utils.wireframeify(targetItem);
   targetItem.position.y = 0;
+  if (targetItem.name === 'gnome') {
+    targetItem.position.y = 2.5;
+  }
   targetItem.position.z = -2;
   core.spinningItem = targetItem;
 
@@ -516,27 +521,33 @@
 
   utils.append(targetItem, targetScreen);
 
-  utils.gaze(utils.getNamedObject(core.scene, 'floor'),function(){},function(){},function(){});
 
   // example of gaze
   utils.gaze(
     utils.getChildren(cupboards),
-    function (obj) {
-      console.log('over', obj.name);
-    },
-    function (obj) {
-      console.log('out', obj.name);
-    },
-    function (obj) {
-      console.log('long', obj.name);
-      utils.pickUp(obj, obj.parent, core.cameraSlot);
+    {
+      over: function (obj) {
+        obj.parent.scale.set(1.2,1.2,1.2);
+      },
+      out: function (obj) {
+        obj.parent.scale.set(1,1,1);
+      },
+      long: function (obj) {
+        utils.pickUp(obj, obj.parent, core.cameraSlot);
+      }
     }
   );
 
   var paperSlot = utils.getNamedObject(core.scene, 'paperslot');
-  utils.gaze(paperSlot.children[0], function (){}, function (){}, function (obj) {
-    utils.pickUp(obj, paperSlot, core.cameraSlot);
-  });
+  utils.gaze(
+    paperSlot.children[0],
+    {
+      timeout: 2000,
+      long: function (obj) {
+        utils.pickUp(obj, paperSlot, core.cameraSlot);
+      }
+    }
+  );
 
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);

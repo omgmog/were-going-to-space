@@ -361,6 +361,7 @@ var game = (function () {
         if (target.name === 'floor') break;
         target = target.parent;
       }
+      var timeout = target.gazetimeout || core.rayTimeout;
 
       if (target.userData.gazeable) {
         if (target.userData && target.userData.holding) {
@@ -368,29 +369,32 @@ var game = (function () {
           core.rayfloor.material.opacity = 0;
           return;
         }
-        if (core.INTERSECTED != target) {
+        if (core.INTERSECTED != null) {
+          if (core.INTERSECTED == target) {
+            // long gaze
+            if (core.rayDelta >= timeout) {
+              if (typeof core.INTERSECTED.ongazelong === 'function') {
+                core.INTERSECTED.ongazelong();
+                core.vibrate(100, 50);
+              }
+            }
+          } else {
+            // out gaze
+            if (typeof core.INTERSECTED.ongazeout === 'function') {
+              core.INTERSECTED.ongazeout();
+            }
+            core.INTERSECTED = null;
+          }
+        } else {
+          // short gaze
           core.INTERSECTED = target;
           if (typeof core.INTERSECTED.ongazeover === 'function') {
             core.INTERSECTED.ongazeover();
             core.vibrate(50);
           }
-        } else {
-          if (core.rayDelta >= core.rayTimeout) {
-            if (typeof core.INTERSECTED.ongazelong === 'function') {
-              core.INTERSECTED.ongazelong();
-              core.vibrate(100, 50);
-            }
-          }
-        }
-      } else {
-        if (core.INTERSECTED) {
-          if (typeof core.INTERSECTED.ongazeout === 'function') {
-            core.INTERSECTED.ongazeout();
-          }
-          core.INTERSECTED = null;
         }
       }
-      core.rayThen = core.rayNow - (core.rayDelta % core.rayTimeout);
+      core.rayThen = core.rayNow - (core.rayDelta % timeout);
 
       // show hide floor marker
       core.rayfloor.material.opacity = .6;
@@ -413,20 +417,29 @@ var game = (function () {
     }
   };
 
-  utils.gaze = function (objects, over, out, long) {
+  utils.gaze = function (objects, options) {
+    var options = Object.assign({}, {
+      timeout: core.rayTimeout,
+      over: function () {},
+      out: function () {},
+      long: function () {},
+    }, options || {});
     // have the object react when user looks at it
     if (!(objects instanceof Array)) {
       objects = [objects];
     }
+
     objects.forEach(function (obj) {
+      obj.gazetimeout = options.timeout;
+      console.log(obj.gazetimeout);
       obj.ongazeover = function (e) {
-        over(obj);
+        options.over(obj);
       };
       obj.ongazeout = function (e) {
-        out(obj);
+        options.out(obj);
       };
       obj.ongazelong = function (e) {
-        long(obj);
+        options.long(obj);
       };
       obj.updateMatrixWorld();
       obj.userData.gazeable = true;
