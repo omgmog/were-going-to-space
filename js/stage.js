@@ -533,11 +533,12 @@
   );
 
   var paperSlot = utils.getNamedObject(core.scene, 'paperslot');
+  var cameraSlot = utils.getNamedObject(core.scene, 'cameraslot');
   utils.gaze(paperSlot.children[0], function (){}, function (){}, function (obj) {
     if (obj.userData && obj.userData.inspecting) {
       return;
     }
-    utils.pickUp(obj, paperSlot, core.camera);
+    utils.pickUp(obj, paperSlot, cameraSlot);
   });
 
   // lights

@@ -282,66 +282,48 @@ var game = (function () {
     // );
     // core.scene.add(core.arrow);
   };
-  utils.destroy = function (obj, from) {
-    console.log(`can we destroy ${obj.name}?`);
-    if (utils.getNamedObject(from, obj.name)) {
-      from.remove(obj);
-      console.log('yes we can!');
-    }
+
+  // becuase the attach/detach from SceneUtils applies a matrix, lets not use that
+  utils.attach = function (obj, parent) {
+    core.scene.remove(obj);
+    parent.add(obj);
   };
+  utils.detach = function (obj, parent) {
+    parent.remove(obj);
+    core.scene.add(obj);
+  }
+
   utils.pickUp = function (obj, from, to) {
-    var newObj = obj.clone();
-    newObj.userData.inspecting = true;
-    newObj.userData.position = obj.position;
-    newObj.userData.rotation = obj.rotation;
-    newObj.userData.scale = obj.scale;
+    if (obj.userData.holding) return;
 
-    var oldPosition = {
-      x: 0,
-      y: 0,
-      z: -100,
-    };
-    var newPosition = {
-      x: 0,
-      y: 0,
-      z: -25,
-    };
+    obj.userData.holding = true;
+    core.camera.userData.heldObj = obj.name;
+    core.camera.userData.heldObjFrom = from.name;
 
-    // tilt the object away from the camera a bit
-    newObj.rotation.set(utils.d2r(-10),0,0);
-    utils.append(newObj, core.camera);
+    utils.detach(obj, from);  // from original place
+    utils.attach(obj, to);    // to camera
 
-    var positionTween = new TWEEN.Tween(oldPosition).to(newPosition, 500);
-    positionTween.onUpdate(function() {
-      newObj.position.set(oldPosition.x, oldPosition.y, oldPosition.z);
+    document.addEventListener('click', function cb(event) {
+      utils.putDown(
+        obj,
+        core.cameraSlot,
+        utils.getNamedObject(core.scene, core.camera.userData.heldObjFrom)
+      ); // put it back on click
+      // unbind this listener
+      event.currentTarget.removeEventListener(event.type, cb);
     });
-    positionTween.start();
 
-    utils.destroy(obj, from);
-
-
-    // setTimeout(function () {
-    //   utils.putBack(newObj, to, from);
-    // }, 2000);
   };
 
-  utils.putBack = function (obj, from, to) {
-    var newObj = obj.clone();
-    console.log(obj.userData);
-    var opos = obj.userData.position;
-    var orot = obj.userData.rotation;
-    var osca = obj.userData.scale;
-    newObj.position.set(opos.x, opos.y, opos.z);
-    newObj.rotation.set(orot.x, orot.y, orot.z);
-    newObj.scale.set(osca.x, osca.y, osca.z);
+  utils.putDown = function (obj, from, to) {
+    if (!obj.userData.holding) return;
 
-    newObj.userData.inspecting = false;
-    newObj.userData.position = null;
-    newObj.userData.rotation = null;
-    newObj.userData.scale = null;
+    obj.userData.holding = false;
+    core.camera.userData.heldObj = null;
+    core.camera.userData.heldObjFrom = null;
 
-    utils.append(newObj, to);
-    utils.destroy(obj, obj.parent);
+    utils.detach(obj, from);  // from camera
+    utils.attach(obj, to);    // to original place
   };
 
   core.intersectedObject = null;
@@ -373,6 +355,11 @@ var game = (function () {
       }
 
       if (target.userData.gazeable) {
+        if (target.userData && target.userData.holding) {
+          // if we're holding something, hide the ray ring and get out of here
+          core.rayfloor.material.opacity = 0;
+          return;
+        }
         if (core.INTERSECTED != target) {
           core.INTERSECTED = target;
           if (typeof core.INTERSECTED.ongazeover === 'function') {
@@ -403,6 +390,7 @@ var game = (function () {
         core.rayfloor.rotation.set(-utils.tau, 0, 0);
         core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y + .1, intersects[0].point.z);
         core.rayfloor.scale.set(1,1,1);
+        core.rayfloor.opacity = 1;
       } else {
         // core.rayfloor.material.opacity = 0;
         core.rayfloor.rotation.x = 0;
@@ -413,7 +401,6 @@ var game = (function () {
       }
     } else {
       core.rayfloor.scale.set(1,1,1);
-      core.rayfloor.material.opacity = 0;
       core.rayfloor.rotation.set(0,0,0);
     }
   };
@@ -528,6 +515,10 @@ var game = (function () {
     }
     core.camera.position.y = (core.controls.userHeight * 10) || core.cameraHeight;
     core.camera.updateProjectionMatrix();
+    core.cameraSlot = utils.namedObject('cameraslot');
+    core.cameraSlot.position.z = -25;
+    core.cameraSlot.rotation.x = utils.d2r(-10);
+    utils.append(core.cameraSlot, core.camera);
     core.scene.add(core.camera);
 
     // Shadow setup
