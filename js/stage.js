@@ -56,12 +56,17 @@
     new T.Vector2(1.45801153, 17.3400002),
     new T.Vector2(0, 17.3400002)
   ];
+  var metalTexture = new T.TextureLoader().load('assets/metal.jpg');
+  metalTexture.wrapS = metalTexture.wrapT = T.RepeatWrapping;
+  metalTexture.repeat.set(1, 2);
+
   var rocketBody = utils.build(
     'LatheGeometry', [rocketGeo, 16],
     'MeshPhongMaterial', [{
-      color: utils.colors.light_gray,
-      specular: utils.colors.white,
-      shininess: 90,
+      color: utils.colors.white,
+      map: metalTexture,
+      // specular: utils.colors.white,
+      // shininess: 90,
     }]
   );
   rocketBody.geometry.applyMatrix(utils.flipVertical());
@@ -176,13 +181,21 @@
   table.position.z = -40;
   table.position.x = -20;
 
+  var tableTopTexture = new T.TextureLoader().load('assets/wood.jpg');
+  tableTopTexture.wrapS = tableTopTexture.wrapT = T.RepeatWrapping;
+  tableTopTexture.repeat.set(4,1);
   var tableTop = utils.build(
     'BoxGeometry', [tableProps.width, tableProps.topThickness, tableProps.depth],
     'MeshPhongMaterial', [{
       color: tableProps.color,
+      map: tableTopTexture,
     }]
   );
   utils.append(tableTop, table);
+
+  var tableLegTexture = new T.TextureLoader().load('assets/cupboardLeg.jpg');
+  tableLegTexture.wrapS = tableLegTexture.wrapT = T.RepeatWrapping;
+  tableLegTexture.repeat.set(1, 4);
   var tableLeg = utils.build(
     'CylinderGeometry', [
       tableProps.legThickness,
@@ -192,6 +205,7 @@
     ],
     'MeshPhongMaterial', [{
       color: tableProps.color,
+      map: tableLegTexture,
     }]
   );
   var tableLegs = [];
@@ -401,11 +415,15 @@
     legs: 4,
     legThickness: 1,
   };
+  var shelfTexture = new T.TextureLoader().load('assets/cupboardShelf.jpg');
+  shelfTexture.wrapS = shelfTexture.wrapT = T.RepeatWrapping;
+  shelfTexture.repeat.set(4, 1);
 
   var shelf = utils.build(
     'BoxGeometry', [cupboardProps.width, 1, cupboardProps.depth],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
+      map: shelfTexture,
     }]
   );
   var shelves = [];
@@ -429,11 +447,15 @@
   })
   utils.append(shelves, cupboard);
 
+  var legTexture = new T.TextureLoader().load('assets/cupboardLeg.jpg');
+  legTexture.wrapS = legTexture.wrapT = T.RepeatWrapping;
+  legTexture.repeat.set(1, 4);
 
   var cupboardLeg = utils.build(
     'CylinderGeometry', [cupboardProps.legThickness, cupboardProps.legThickness, cupboardProps.height, 8],
     'MeshPhongMaterial', [{
       color: utils.colors.light_gray,
+      map: legTexture,
     }]
   );
   var cupboardLegs = [];

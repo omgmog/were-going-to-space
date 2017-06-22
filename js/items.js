@@ -150,16 +150,21 @@ game.items = (function () {
     },
     cone: function () {
       var item = utils.namedObject("cone");
+      var texture = new T.TextureLoader().load('assets/plastic.jpg');
+      texture.wrapS = texture.wrapT = T.RepeatWrapping;
+      texture.repeat.set(2, 1);
       var cone = new utils.build(
         'CylinderGeometry', [.6, 1.9, 5, 6],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
+          map: texture,
         }]
       );
       var base = new utils.build(
         'BoxGeometry', [5, .5, 5],
         'MeshPhongMaterial', [{
           color: utils.colors.light_red,
+          map: texture,
         }]
       );
       base.position.y = -2.5;
