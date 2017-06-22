@@ -24,6 +24,12 @@ var game = (function () {
     if (core.spinningItem) {
       core.spinningItem.rotation.y += 0.01;
     }
+    // if we're holding something and it isn't paper
+    if (core.cameraSlot.children.length > 0 && core.cameraSlot.children[0].name !== 'paper') {
+      core.cameraSlot.rotation.y += 0.01;
+    } else {
+      core.cameraSlot.rotation.y = 0;
+    }
 
     core.controls.update();
     core.renderer.render(core.scene, core.camera);
