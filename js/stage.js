@@ -433,9 +433,9 @@
     _shelf.position.y = 10 + (i * 10);
 
     utils.append([
-      utils.namedObject("slot0"),
-      utils.namedObject("slot1"),
-      utils.namedObject("slot2")
+      utils.namedObject(`slot${i}_0`),
+      utils.namedObject(`slot${i}_1`),
+      utils.namedObject(`slot${i}_2`)
     ], _shelf);
 
     var ypos = 7;
@@ -499,12 +499,12 @@
     utils.do(cupboardProps.shelves, function (j) {
       utils.do(3, function (k) {
         var _obj = game.items[utils.getRandomItem(items)]().clone();
-        utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${k}`));
+        utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${j}_${k}`));
       });
     });
   });
 
-  var target = utils.getNamedObject(cupboards[1].children[1], "slot1");
+  var target = utils.getNamedObject(cupboards[1].children[1], "slot1_1");
   var targetItem = target.children[0].clone();
 
   utils.wireframeify(targetItem);
@@ -516,9 +516,9 @@
 
   utils.append(targetItem, targetScreen);
 
+  utils.gaze(utils.getNamedObject(core.scene, 'floor'),function(){},function(){},function(){});
 
   // example of gaze
-  utils.gaze(utils.getNamedObject(core.scene, 'floor'),function(){},function(){},function(){});
   utils.gaze(
     utils.getChildren(cupboards),
     function (obj) {
@@ -529,6 +529,7 @@
     },
     function (obj) {
       console.log('long', obj.name);
+      utils.pickUp(obj, obj.parent, core.cameraSlot);
     }
   );
 
