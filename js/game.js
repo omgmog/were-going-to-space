@@ -282,15 +282,19 @@ var game = (function () {
     // );
     // core.scene.add(core.arrow);
   };
-  utils.destroy = function (obj) {
-    if (core.scene.getObjectById(obj.id, true)) {
-      obj.parent.remove(obj);
+  utils.destroy = function (obj, from) {
+    console.log(`can we destroy ${obj.name}?`);
+    if (utils.getNamedObject(from, obj.name)) {
+      from.remove(obj);
+      console.log('yes we can!');
     }
   };
-  utils.inspect = function (obj) {
-    var newObject = obj.clone();
-    newObject.userData.inspecting = true;
-    newObject.userData.oldposition = obj.position;
+  utils.pickUp = function (obj, from, to) {
+    var newObj = obj.clone();
+    newObj.userData.inspecting = true;
+    newObj.userData.position = obj.position;
+    newObj.userData.rotation = obj.rotation;
+    newObj.userData.scale = obj.scale;
 
     var oldPosition = {
       x: 0,
@@ -303,16 +307,41 @@ var game = (function () {
       z: -25,
     };
 
-    newObject.rotation.set(utils.d2r(-10),0,0);
-    utils.append(newObject, core.camera);
+    // tilt the object away from the camera a bit
+    newObj.rotation.set(utils.d2r(-10),0,0);
+    utils.append(newObj, core.camera);
 
     var positionTween = new TWEEN.Tween(oldPosition).to(newPosition, 500);
     positionTween.onUpdate(function() {
-      newObject.position.set(oldPosition.x, oldPosition.y, oldPosition.z);
+      newObj.position.set(oldPosition.x, oldPosition.y, oldPosition.z);
     });
     positionTween.start();
 
-    utils.destroy(obj);
+    utils.destroy(obj, from);
+
+
+    // setTimeout(function () {
+    //   utils.putBack(newObj, to, from);
+    // }, 2000);
+  };
+
+  utils.putBack = function (obj, from, to) {
+    var newObj = obj.clone();
+    console.log(obj.userData);
+    var opos = obj.userData.position;
+    var orot = obj.userData.rotation;
+    var osca = obj.userData.scale;
+    newObj.position.set(opos.x, opos.y, opos.z);
+    newObj.rotation.set(orot.x, orot.y, orot.z);
+    newObj.scale.set(osca.x, osca.y, osca.z);
+
+    newObj.userData.inspecting = false;
+    newObj.userData.position = null;
+    newObj.userData.rotation = null;
+    newObj.userData.scale = null;
+
+    utils.append(newObj, to);
+    utils.destroy(obj, obj.parent);
   };
 
   core.intersectedObject = null;

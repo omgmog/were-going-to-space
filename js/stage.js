@@ -387,6 +387,7 @@
 
 
     // paper
+    var paperSlot = utils.namedObject("paperslot");
     var paper = utils.namedObject("paper");
     var _page = utils.build(
       'PlaneGeometry', [10,15,1],
@@ -395,13 +396,13 @@
         map: new T.TextureLoader().load('assets/paper.jpg'),
       }]
     );
-    paper.rotation.x = -utils.tau;
-    paper.position.y = 1;
-    paper.position.x = -8;
-    paper.rotation.z = utils.d2r(10);
     utils.append(_page, paper);
-    utils.append(paper, table);
-
+    utils.append(paper, paperSlot);
+    paperSlot.rotation.x = -utils.tau;
+    paperSlot.position.y = 1;
+    paperSlot.position.x = -8;
+    paperSlot.rotation.z = utils.d2r(10);
+    utils.append(paperSlot, table);
     utils.append(table, core.scene);
 
   // cupboards
@@ -531,11 +532,12 @@
     }
   );
 
-  utils.gaze(paper, function (){}, function (){}, function (obj) {
+  var paperSlot = utils.getNamedObject(core.scene, 'paperslot');
+  utils.gaze(paperSlot.children[0], function (){}, function (){}, function (obj) {
     if (obj.userData && obj.userData.inspecting) {
       return;
     }
-    utils.inspect(obj);
+    utils.pickUp(obj, paperSlot, core.camera);
   });
 
   // lights
