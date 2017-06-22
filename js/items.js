@@ -314,7 +314,37 @@ game.items = (function () {
       item.scale.set(2.5,2.5,2.5);
 
       return item;
-    }
+    },
+    barrel: function () {
+      var item = utils.namedObject('barrel');
+
+      var sideTex = new T.TextureLoader().load('assets/barrelsides.jpg');
+      sideTex.wrapS = sideTex.wrapT = T.RepeatWrapping;
+      sideTex.repeat.set(2, 1);
+      var barrel = utils.build(
+        'CylinderGeometry', [3, 3, 8, 16, 1, true],
+        'MeshPhongMaterial', [{
+          map: sideTex,
+        }]
+      );
+      var topTex = new T.TextureLoader().load('assets/barreltop.jpg');
+      var barrelTop = utils.build(
+        'CircleGeometry', [3, 16],
+        'MeshPhongMaterial', [{
+          map: topTex,
+          side: T.DoubleSide,
+        }]
+      );
+      barrelTop.rotation.x = -utils.tau;
+      var barrelBottom = barrelTop.clone();
+
+      barrelBottom.position.y = -4;
+      barrelTop.position.y = 4;
+
+      utils.append([barrel, barrelTop, barrelBottom], item);
+      item.position.y = -2.5;
+      return item;
+    },
   };
 
   return {
@@ -324,5 +354,6 @@ game.items = (function () {
     crate: items.crate,
     printedsaveicons: items.printedsaveicons,
     ufo: items.ufo,
+    barrel: items.barrel,
   };
 }());
