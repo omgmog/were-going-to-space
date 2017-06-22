@@ -27,8 +27,10 @@ var game = (function () {
     // if we're holding something and it isn't paper
     if (core.cameraSlot.children.length > 0 && core.cameraSlot.children[0].name !== 'paper') {
       core.cameraSlot.rotation.y += 0.01;
+      core.cameraSlot.rotation.x = (.33 * core.camera.rotation.x) - utils.d2r(utils.tau);
     } else {
       core.cameraSlot.rotation.y = 0;
+      core.cameraSlot.rotation.x = 0;
     }
 
     core.controls.update();
