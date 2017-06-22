@@ -549,6 +549,14 @@
     }
   );
 
+  // build out the robot then...
+
+  var robotTrack = utils.namedObject('robottrack');
+  robotTrack.position.set(40, 0, -30);
+  utils.append(core.robot, robotTrack);
+  robotTrack.lookAt(new T.Vector3(core.camera.position.x, 0, core.camera.position.z));
+  utils.append(robotTrack, core.scene);
+
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);
   utils.append(ambient, core.scene);

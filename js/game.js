@@ -487,6 +487,110 @@ var game = (function () {
     'finish'
   ];
 
+  core.robot = null;
+
+  core.makeRobot = function () {
+    var robot = utils.namedObject('robot');
+    var _sphere = utils.build(
+      'SphereGeometry', [2, 16, 8, 0, utils.pi],
+      'MeshPhongMaterial', [{
+        color: utils.colors.dark_blue,
+      }]
+    );
+    _sphere.rotation.x = -utils.tau;
+
+    // bubble
+    var _bubble = _sphere.clone();
+    _bubble.material = _sphere.material.clone();
+    _bubble.material.color.setHex(utils.colors.light_blue);
+    _bubble.material.transparent = true;
+    _bubble.material.opacity = .4;
+
+    // head
+    var _head = _sphere.clone();
+    _head.material = _sphere.material.clone();
+    _head.material.color.setHex(utils.colors.white);
+    _head.scale.set(.5,.5,.5);
+    _head.position.z = .5;
+    _head.rotation.x = utils.pi2;
+
+    var _eye = utils.build(
+      'SphereGeometry', [.33, 8, 8],
+      'MeshPhongMaterial', [{
+        color: utils.colors.dark_blue
+      }]
+    );
+    _eye.position.y = -1.5;
+    _eye.position.z = 1;
+    var _leye = _eye.clone();
+    var _reye = _eye.clone();
+    _reye.position.x = -.8;
+    _leye.position.x = .8;
+    utils.append([_leye,_reye], _head);
+
+    var _headcap = utils.build(
+      'CircleGeometry', [1, 16],
+      'MeshPhongMaterial', [{
+        side: T.DoubleSide,
+        color: utils.colors.white,
+      }]
+    );
+    _headcap.position.z = .5;
+
+    var _neck = utils.build(
+      'CylinderGeometry', [.5, .5, .5, 8],
+      'MeshPhongMaterial', [{
+        color: utils.colors.light_blue,
+      }]
+    );
+    _neck.rotation.x = utils.tau;
+    _neck.position.z = .25;
+
+    utils.append([_head, _headcap, _neck], _bubble);
+
+    // body
+    var _body = _sphere.clone();
+    _body.material = _sphere.material.clone();
+    _body.material.color.setHex(utils.colors.white);
+    _body.material.side = T.DoubleSide;
+    _body.rotation.x = utils.tau;
+
+    var _bodycap = utils.build(
+      'CircleGeometry', [1.8, 16],
+      'MeshPhongMaterial', [{
+        side: T.DoubleSide,
+        color: utils.colors.light_blue,
+      }]
+    );
+    utils.append(_bodycap, _body);
+
+
+    // wheels
+
+
+    robot.scale.set(4,4,4);
+    utils.append([_bubble, _body], robot);
+
+    var bobMax = {
+      y: 2
+    };
+    var bobMin = {
+      y: -2
+    };
+
+    var bobRobot = new TWEEN.Tween(bobMin).to(bobMax, 1000)
+    .onUpdate(function() {
+      robot.position.y = bobMin.y
+    })
+    .yoyo(true)
+    .repeat( Infinity )
+    .start();
+
+    core.robot = robot;
+  }
+
+  core.makeRobot();
+
   var init = function () {
     core.interacts = [];
     core.currentGamePhase = 0; // menu phase
