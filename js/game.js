@@ -294,7 +294,7 @@ var game = (function () {
   }
 
   utils.pickUp = function (obj, from, to) {
-    if (obj.userData.holding) return;
+    if (obj.userData.holding || core.camera.userData.heldObj) return;
 
     obj.userData.holding = true;
     core.camera.userData.heldObj = obj.name;
