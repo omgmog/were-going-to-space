@@ -324,7 +324,7 @@ var game = (function () {
     utils.detach(obj, from);  // from original place
     utils.attach(obj, to);    // to camera
 
-    document.addEventListener('click', function cb(event) {
+    document.querySelector('canvas').addEventListener('click', function cb(event) {
       utils.putDown(
         obj,
         core.cameraSlot,
@@ -436,7 +436,7 @@ var game = (function () {
         core.rayfloor.rotation.x = 0;
         core.rayfloor.lookAt(core.camera.position);
         core.rayfloor.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-        core.rayfloor.scale.set(.7, .7, .7);
+        core.rayfloor.scale.set(.4, .4, .4);
         core.rayfloor.material.opacity = .9;
       }
     } else {
