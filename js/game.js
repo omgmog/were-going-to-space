@@ -476,6 +476,7 @@ var game = (function () {
     overlay.addEventListener('click', function (e) {
       // when clicked, do the following
       if (core.currentGamePhase === 0) {
+        utils.playSound('sounds/start.mp3');
         utils.startGame();
         overlay.classList.remove('visible');
       }
