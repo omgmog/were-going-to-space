@@ -433,19 +433,6 @@
   utils.do(cupboardProps.shelves, function (i) {
     var _shelf = shelf.clone();
     _shelf.position.y = 10 + (i * 10);
-
-    utils.append([
-      utils.namedObject(`slot${i}_0`),
-      utils.namedObject(`slot${i}_1`),
-      utils.namedObject(`slot${i}_2`)
-    ], _shelf);
-
-    var ypos = 7;
-
-    _shelf.children[0].position.set(-(cupboardProps.width / 3), ypos, 0);
-    _shelf.children[1].position.set(0, ypos, 0);
-    _shelf.children[2].position.set(cupboardProps.width / 3, ypos, 0);
-
     shelves.push(_shelf);
   })
   utils.append(shelves, cupboard);
@@ -496,17 +483,31 @@
 
   var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo', 'crate', 'barrel'];
 
+  var positions = [
+    new T.Vector3(-(cupboardProps.width / 3), 7, 0),
+    new T.Vector3(0, 7, 0),
+    new T.Vector3(cupboardProps.width / 3, 7, 0)
+  ];
   // Stick some items on the shelves
   utils.do(cupboards.length, function (i) {
     utils.do(cupboardProps.shelves, function (j) {
+
       utils.do(3, function (k) {
+        var shelf = cupboards[i].children[j];
+        var slot = utils.namedObject(`slot_${i}_${j}_${k}`);
+        slot.position.set(positions[k].x, positions[k].y, positions[k].z);
+        utils.append(slot, shelf);
+
+
         var _obj = game.items[utils.getRandomItem(items)]().clone();
-        utils.append(_obj, utils.getNamedObject(cupboards[i].children[j], `slot${j}_${k}`));
+        utils.append(_obj, slot);
       });
     });
   });
 
-  var target = utils.getNamedObject(cupboards[1].children[1], "slot1_1");
+
+  // dummy selection of target
+  var target = utils.getNamedObject(cupboards[1].children[1], "slot_1_1_1");
   var targetItem = target.children[0].clone();
 
   utils.wireframeify(targetItem);
