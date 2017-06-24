@@ -342,6 +342,12 @@ var game = (function () {
   core.rayTimeout = 2500; // 2.5s in ms
   core.rayOld = 0;
 
+  utils.playSound = function (soundfile) {
+    var sound = new Howl({
+      src: [soundfile]
+    });
+    sound.play();
+  };
   core.vibrate = navigator.vibrate ? navigator.vibrate.bind(navigator) : function () {};
   utils.updateRaycaster = function () {
     core.rayNow = Date.now();
@@ -377,11 +383,17 @@ var game = (function () {
                 core.INTERSECTED.ongazelong();
                 core.vibrate(100, 50);
               }
+              if (core.INTERSECTED.userData.longsound) {
+                utils.playSound(core.INTERSECTED.userData.longsound);
+              }
             }
           } else {
             // out gaze
             if (typeof core.INTERSECTED.ongazeout === 'function') {
               core.INTERSECTED.ongazeout();
+            }
+            if (core.INTERSECTED.userData.outsound) {
+              utils.playSound(core.INTERSECTED.userData.outsound);
             }
             core.INTERSECTED = null;
           }
@@ -391,6 +403,9 @@ var game = (function () {
           if (typeof core.INTERSECTED.ongazeover === 'function') {
             core.INTERSECTED.ongazeover();
             core.vibrate(50);
+          }
+          if (core.INTERSECTED.userData.oversound) {
+            utils.playSound(core.INTERSECTED.userData.oversound);
           }
         }
       }
@@ -423,6 +438,9 @@ var game = (function () {
       over: function () {},
       out: function () {},
       long: function () {},
+      oversound: null,
+      outsound: null,
+      longsound: null,
     }, options || {});
     // have the object react when user looks at it
     if (!(objects instanceof Array)) {
@@ -431,7 +449,7 @@ var game = (function () {
 
     objects.forEach(function (obj) {
       obj.gazetimeout = options.timeout;
-      console.log(obj.gazetimeout);
+
       obj.ongazeover = function (e) {
         options.over(obj);
       };
@@ -441,6 +459,9 @@ var game = (function () {
       obj.ongazelong = function (e) {
         options.long(obj);
       };
+      obj.userData.oversound = options.oversound;
+      obj.userData.outsound = options.outsound;
+      obj.userData.longsound = options.longsound;
       obj.updateMatrixWorld();
       obj.userData.gazeable = true;
       core.interacts.push(obj);

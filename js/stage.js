@@ -558,6 +558,12 @@
   robotTrack.lookAt(new T.Vector3(core.camera.position.x, 0, core.camera.position.z));
   utils.append(robotTrack, core.scene);
 
+  utils.gaze(
+    core.robot,
+    {
+      oversound: 'sounds/sfx_sound_nagger2.wav',
+    }
+  );
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);
   utils.append(ambient, core.scene);
