@@ -546,17 +546,23 @@
       timeout: 2000,
       long: function (obj) {
         utils.pickUp(obj, paperSlot, core.cameraSlot);
-        core.currentRobotPhase = 2; // user found the paper, so dont need to prompt
+        core.lookedAtPaper = true;
       }
     }
   );
 
+
+
   // build out the robot then...
+
+
+
 
   var robotTrack = utils.namedObject('robottrack');
   robotTrack.position.set(40, 0, -30);
   utils.append(core.robot, robotTrack);
-  robotTrack.lookAt(new T.Vector3(core.camera.position.x, 0, core.camera.position.z));
+  var robotTrackDefaultLook = new T.Vector3(core.camera.position.x, 0, core.camera.position.z)
+  robotTrack.lookAt(robotTrackDefaultLook);
   utils.append(robotTrack, core.scene);
 
   utils.gaze(
@@ -564,12 +570,35 @@
     {
       longsound: 'sounds/sfx_sound_nagger2.wav',
       long: function (obj) {
-        if (core.currentRobotPhase === 0) {
+        if (!core.lookedAtPaper) {
           core.currentRobotPhase = 1;
+          robotTrack.lookAt(new T.Vector3(paperSlot.position.x, 0, paperSlot.position.z - 20))
+          var position = {y: 1};
+          var position_to = {y: 6};
+          var bubbletween = new TWEEN.Tween(position)
+            .to(position_to, 250)
+            .onUpdate(function () {
+              utils.getNamedObject(core.robot, 'bubbleprompt').position.y = position.y;
+            })
+            .start();
+
+          setTimeout(function () {
+            core.currentRobotPhase = 0;
+            robotTrack.lookAt(robotTrackDefaultLook);
+            utils.playSound('sounds/sfx_sounds_interaction18.wav');
+          }, 2500);
+        } else {
+          core.currentRobotPhase = 2;
         }
       }
     }
   );
+
+
+
+
+
+
   // lights
   var ambient = new T.AmbientLight(utils.colors.light_gray);
   utils.append(ambient, core.scene);

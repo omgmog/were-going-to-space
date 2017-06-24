@@ -44,19 +44,16 @@ var game = (function () {
 
   // logic update
   utils.update = function (delta) {
-    switch (core.robotPhases[core.currentRobotPhase]) {
+    var prompt = utils.getNamedObject(core.scene, 'bubbleprompt');
+    var phase = core.robotPhases[core.currentRobotPhase];
+
+    switch (phase) {
       case 'prompted-sheet':
-        var prompt = utils.getNamedObject(core.robot, 'bubbleprompt');
-
-        // show bubble
-        prompt.children[0].material.opacity = 1;
-        // show graphic
-        prompt.children[1].material.opacity = 1;
-
-
+        if (!prompt.visible) prompt.visible = true;
+      break;
       case 'no-interaction':
-        // console.log('doing nothing');
-
+        if (prompt.visible) prompt.visible = false;
+      break;
   }
   }
 
@@ -355,10 +352,24 @@ var game = (function () {
   core.rayTimeout = 2500; // 2.5s in ms
   core.rayOld = 0;
 
-  utils.playSound = function (soundfile) {
+  utils.playSound = function (soundfile, options) {
+    if (!core.soundsEnabled) return;
+    var options = Object.assign({}, {
+      loop: false,
+      assign: null
+    }, options || {});
     var sound = new Howl({
-      src: [soundfile]
+      src: [soundfile],
+      onfade: function () {
+        this.stop();
+      }
     });
+    if (options.assign ) {
+      core[options.assign] = sound;
+    }
+    if (options.loop) {
+      sound.loop(true);
+    }
     sound.play();
   };
   core.vibrate = navigator.vibrate ? navigator.vibrate.bind(navigator) : function () {};
@@ -485,9 +496,16 @@ var game = (function () {
   utils.showMenu = function () {
     var overlay = document.querySelector('.overlay');
     overlay.querySelector('.btn .action').innerText = utils.onMobileDevice()? 'Touch' : 'Click';
+    utils.playSound('sounds/menu.mp3', {
+      loop: true,
+      assign: 'menumusic'
+    });
 
     overlay.addEventListener('click', function (e) {
       // when clicked, do the following
+      if (core.soundsEnabled) {
+        core.menumusic.fade(1, 0, 500);
+      }
       if (core.currentGamePhase === 0) {
         utils.playSound('sounds/start.mp3');
         utils.startGame();
@@ -500,11 +518,15 @@ var game = (function () {
 
 
   utils.startGame = function () {
-      console.log('start game!');
       core.currentGamePhase++;
       core.stats = new Stats();
       core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild( core.stats.dom );
+
+      utils.playSound('sounds/music.mp3', {
+        loop: true,
+        assign: 'gamemusic'
+      });
 
       utils.setupRaycaster();
       utils.setupVRMode();
@@ -521,6 +543,7 @@ var game = (function () {
     'level2',
     'finish'
   ];
+  core.lookedAtPaper = false;
 
   core.robot = null;
 
@@ -629,19 +652,18 @@ var game = (function () {
       'MeshPhongMaterial', [{
         color: utils.colors.white,
         transparent: true,
-        opacity: 0,
       }]
     );
     bubbleMesh.geometry.applyMatrix(utils.flipVertical());
     bubblePrompt.position.set(-2, 6, 0);
     bubblePrompt.rotation.x = utils.d2r(-5);
+    bubblePrompt.visible = false;
     // we also need a plane to texture...
     var bubblePlane = utils.build(
       'PlaneGeometry', [4, 3, .1],
       'MeshPhongMaterial', [{
         map: new T.TextureLoader().load('assets/prompt-sheet.jpg'),
         transparent: true,
-        opacity: 0,
       }]
     );
     bubblePlane.position.set(2, -1.5, .1)
@@ -678,8 +700,8 @@ var game = (function () {
   core.robotPhases = [
     'no-interaction',
     'prompted-sheet',
-    'waiting-for-item',
     'prompted-screen',
+    'waiting-for-item',
     'picked-item',
     'carrying-item',
     'placed-item'
@@ -753,6 +775,8 @@ var game = (function () {
     core.renderer.shadowMapHeight = 1024;
 
     core.raycaster = null;
+
+    core.soundsEnabled = false;
 
 
     // Initialise it
