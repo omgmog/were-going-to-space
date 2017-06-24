@@ -561,7 +561,7 @@
   utils.gaze(
     core.robot,
     {
-      oversound: 'sounds/sfx_sound_nagger2.wav',
+      longsound: 'sounds/sfx_sound_nagger2.wav',
     }
   );
   // lights

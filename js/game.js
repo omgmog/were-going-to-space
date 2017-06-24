@@ -600,7 +600,7 @@ var game = (function () {
       y: -2
     };
 
-    var bobRobot = new TWEEN.Tween(bobMin).to(bobMax, 1000)
+    var bobRobot = new TWEEN.Tween(bobMin).to(bobMax, 2500)
     .onUpdate(function() {
       robot.position.y = bobMin.y
     })
