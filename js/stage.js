@@ -546,6 +546,7 @@
       timeout: 2000,
       long: function (obj) {
         utils.pickUp(obj, paperSlot, core.cameraSlot);
+        core.currentRobotPhase = 2; // user found the paper, so dont need to prompt
       }
     }
   );
@@ -562,6 +563,11 @@
     core.robot,
     {
       longsound: 'sounds/sfx_sound_nagger2.wav',
+      long: function (obj) {
+        if (core.currentRobotPhase === 0) {
+          core.currentRobotPhase = 1;
+        }
+      }
     }
   );
   // lights

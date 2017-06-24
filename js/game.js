@@ -44,7 +44,20 @@ var game = (function () {
 
   // logic update
   utils.update = function (delta) {
+    switch (core.robotPhases[core.currentRobotPhase]) {
+      case 'prompted-sheet':
+        var prompt = utils.getNamedObject(core.robot, 'bubbleprompt');
 
+        // show bubble
+        prompt.children[0].material.opacity = 1;
+        // show graphic
+        prompt.children[1].material.opacity = 1;
+
+
+      case 'no-interaction':
+        // console.log('doing nothing');
+
+  }
   }
 
   utils.animate = function () {
@@ -589,6 +602,55 @@ var game = (function () {
 
     // wheels
 
+    // help bubble
+    var bubblePrompt = utils.namedObject('bubbleprompt');
+
+    var bubbleShape = new THREE.Shape();
+    bubbleShape.moveTo(0.000, 0.300);
+    bubbleShape.lineTo(0.300, 0.000);
+    bubbleShape.lineTo(3.700, 0.000);
+    bubbleShape.lineTo(4.000, 0.300);
+    bubbleShape.lineTo(4.000, 2.700);
+    bubbleShape.lineTo(3.800, 3.000);
+    bubbleShape.lineTo(2.500, 3.000);
+    bubbleShape.lineTo(2.000, 3.500);
+    bubbleShape.lineTo(1.500, 3.000);
+    bubbleShape.lineTo(0.200, 3.000);
+    bubbleShape.lineTo(0.000, 2.700);
+    bubbleShape.lineTo(0.000, 0.300);
+
+    var bubbleMesh = utils.build(
+      'ExtrudeGeometry', [bubbleShape, {
+        amount: .25,
+        bevelEnabled: false,
+        material: 0,
+        extrudeMaterial: 1,
+      }],
+      'MeshPhongMaterial', [{
+        color: utils.colors.white,
+        transparent: true,
+        opacity: 0,
+      }]
+    );
+    bubbleMesh.geometry.applyMatrix(utils.flipVertical());
+    bubblePrompt.position.set(-2, 6, 0);
+    bubblePrompt.rotation.x = utils.d2r(-5);
+    // we also need a plane to texture...
+    var bubblePlane = utils.build(
+      'PlaneGeometry', [4, 3, .1],
+      'MeshPhongMaterial', [{
+        map: new T.TextureLoader().load('assets/prompt-sheet.jpg'),
+        transparent: true,
+        opacity: 0,
+      }]
+    );
+    bubblePlane.position.set(2, -1.5, .1)
+    bubblePlane.scale.set(.8,.8,1);
+
+    utils.append([bubbleMesh, bubblePlane], bubblePrompt);
+    utils.append(bubblePrompt, robot);
+
+
 
     robot.scale.set(4,4,4);
     utils.append([_bubble, _body], robot);
@@ -612,6 +674,17 @@ var game = (function () {
   }
 
   core.makeRobot();
+
+  core.robotPhases = [
+    'no-interaction',
+    'prompted-sheet',
+    'waiting-for-item',
+    'prompted-screen',
+    'picked-item',
+    'carrying-item',
+    'placed-item'
+  ];
+  core.currentRobotPhase = 0;
 
   var init = function () {
     core.interacts = [];
