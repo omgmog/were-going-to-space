@@ -45,16 +45,45 @@ var game = (function () {
   // logic update
   utils.update = function (delta) {
     var prompt = utils.getNamedObject(core.scene, 'bubbleprompt');
-    var phase = core.robotPhases[core.currentRobotPhase];
-
-    switch (phase) {
+    var plane = utils.getNamedObject(prompt, 'bubbleplane');
+    var robotPhase = core.robotPhases[core.robotPhase];
+    console.log(robotPhase);
+    switch (robotPhase) {
       case 'prompted-sheet':
-        if (!prompt.visible) prompt.visible = true;
+        prompt.visible = true;
+      break;
+      case 'waiting-for-item':
+        var happyText = new T.TextureLoader().load('assets/prompt-love.jpg', function (texture) {
+          plane.material = new T.MeshPhongMaterial({
+            color: utils.colors.white,
+            map: texture,
+          });
+          prompt.visible = true;
+        });
       break;
       case 'no-interaction':
-        if (prompt.visible) prompt.visible = false;
+        prompt.visible = false;
       break;
-  }
+    }
+
+    var gamePhase = core.gamePhases[core.gamePhase];
+
+    switch (gamePhase) {
+      case 'level1':
+
+      break;
+      case 'success':
+
+        // send the rocket to space
+        // show score/gameover
+      break;
+      case 'fail':
+
+        // blow up the rocket?
+        // show score/gameover
+      break;
+
+    }
   }
 
   utils.animate = function () {
@@ -405,7 +434,7 @@ var game = (function () {
             if (core.rayDelta >= timeout) {
               if (typeof core.INTERSECTED.ongazelong === 'function') {
                 core.INTERSECTED.ongazelong();
-                core.vibrate(100, 50);
+                // core.vibrate(100, 50);
               }
               if (core.INTERSECTED.userData.longsound) {
                 utils.playSound(core.INTERSECTED.userData.longsound);
@@ -426,7 +455,7 @@ var game = (function () {
           core.INTERSECTED = target;
           if (typeof core.INTERSECTED.ongazeover === 'function') {
             core.INTERSECTED.ongazeover();
-            core.vibrate(50);
+            // core.vibrate(50);
           }
           if (core.INTERSECTED.userData.oversound) {
             utils.playSound(core.INTERSECTED.userData.oversound);
@@ -506,7 +535,7 @@ var game = (function () {
       if (core.soundsEnabled) {
         core.menumusic.fade(1, 0, 500);
       }
-      if (core.currentGamePhase === 0) {
+      if (core.gamePhase === 0) {
         utils.playSound('sounds/start.mp3');
         utils.startGame();
         overlay.classList.remove('visible');
@@ -518,7 +547,7 @@ var game = (function () {
 
 
   utils.startGame = function () {
-      core.currentGamePhase++;
+      core.gamePhase = 1;
       core.stats = new Stats();
       core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild( core.stats.dom );
@@ -537,11 +566,12 @@ var game = (function () {
   /////////////////////////////////////////////////////////////////////////////
   //// CORE
   /////////////////////////////////////////////////////////////////////////////
-  core.phases = [
+  core.gamePhases = [
     'menu',
     'level1',
     'level2',
-    'finish'
+    'success',
+    'fail'
   ];
   core.lookedAtPaper = false;
 
@@ -646,12 +676,9 @@ var game = (function () {
       'ExtrudeGeometry', [bubbleShape, {
         amount: .25,
         bevelEnabled: false,
-        material: 0,
-        extrudeMaterial: 1,
       }],
       'MeshPhongMaterial', [{
         color: utils.colors.white,
-        transparent: true,
       }]
     );
     bubbleMesh.geometry.applyMatrix(utils.flipVertical());
@@ -663,9 +690,9 @@ var game = (function () {
       'PlaneGeometry', [4, 3, .1],
       'MeshPhongMaterial', [{
         map: new T.TextureLoader().load('assets/prompt-sheet.jpg'),
-        transparent: true,
       }]
     );
+    bubblePlane.name = 'bubbleplane';
     bubblePlane.position.set(2, -1.5, .1)
     bubblePlane.scale.set(.8,.8,1);
 
@@ -706,11 +733,11 @@ var game = (function () {
     'carrying-item',
     'placed-item'
   ];
-  core.currentRobotPhase = 0;
 
   var init = function () {
     core.interacts = [];
-    core.currentGamePhase = 0; // menu phase
+    core.gamePhase = 0; // menu phase
+    core.robotPhase = 0;
     core.clock = new T.Clock();
     core.cameraHeight = 50;
     core.distance = 2000;
@@ -742,15 +769,16 @@ var game = (function () {
 
     if (utils.haveHMD()) {
       // get us in to a proper vr control then
-      console.log('hmd');
+      // console.log('hmd');
       core.controls = new T.VRControls(core.camera, function (err) {console.error(err)});
     } else if (utils.onMobileDevice()) {
       // mobile
-      console.log('mobile');
+      // console.log('mobile');
       core.controls = new T.DeviceOrientationControls(core.camera);
+      core.camera.position.z = 10;
     } else {
       // everything else
-      console.log('standard browser');
+      // console.log('standard browser');
       core.controls = new T.OrbitControls(core.camera);
       // core.camera.position.z += 0.01;
       // core.camera.rotation.x = utils.d2r(-90);
@@ -776,7 +804,7 @@ var game = (function () {
 
     core.raycaster = null;
 
-    core.soundsEnabled = false;
+    core.soundsEnabled = true;
 
 
     // Initialise it

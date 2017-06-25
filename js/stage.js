@@ -570,8 +570,11 @@
     {
       longsound: 'sounds/sfx_sound_nagger2.wav',
       long: function (obj) {
-        if (!core.lookedAtPaper) {
-          core.currentRobotPhase = 1;
+        if (obj.userData.timer) clearTimeout(obj.userData.timer);
+        core.robotPhase = 1;
+        if (core.lookedAtPaper) {
+          core.robotPhase = 3;
+        }
           robotTrack.lookAt(new T.Vector3(paperSlot.position.x, 0, paperSlot.position.z - 20))
           var position = {y: 1};
           var position_to = {y: 6};
@@ -582,14 +585,11 @@
             })
             .start();
 
-          setTimeout(function () {
-            core.currentRobotPhase = 0;
+          obj.userData.timer = setTimeout(function () {
+            core.robotPhase = 0;
             robotTrack.lookAt(robotTrackDefaultLook);
             utils.playSound('sounds/sfx_sounds_interaction18.wav');
           }, 2500);
-        } else {
-          core.currentRobotPhase = 2;
-        }
       }
     }
   );
