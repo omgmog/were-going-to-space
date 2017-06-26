@@ -350,6 +350,23 @@ game.items = (function () {
       item.position.y = -2.5;
       return item;
     },
+    moon: function () {
+      var item = utils.namedObject('moon');
+
+      var body = utils.build(
+        'SphereGeometry', [3, 16, 16],
+        'MeshPhongMaterial', [{
+          color: utils.colors.white,
+          map: new T.TextureLoader().load('assets/moon.jpg')
+        }]
+      );
+
+      utils.append(body, item);
+
+      item.position.y = -3.5;
+
+      return item;
+    },
   };
 
   return {
@@ -360,5 +377,6 @@ game.items = (function () {
     printedsaveicons: items.printedsaveicons,
     ufo: items.ufo,
     barrel: items.barrel,
+    moon: items.moon,
   };
 }());

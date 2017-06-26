@@ -481,7 +481,7 @@
   })
   utils.append(cupboards, core.scene);
 
-  var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo', 'crate', 'barrel'];
+  var items = ['cone', 'gnome', 'dirtblock', 'printedsaveicons', 'ufo', 'crate', 'barrel', 'moon'];
 
   var positions = [
     new T.Vector3(-(cupboardProps.width / 3), 7, 0),
