@@ -43,6 +43,8 @@ Here are a bunch of images I made and lovingly shared with the public while buil
 
 ![](https://media.giphy.com/media/l0Iy001in67YT7DwI/giphy.gif)
 
+![](https://media.giphy.com/media/3oKIPkmnYq96qNfJ3W/giphy.gif)
+
 ![](https://media.giphy.com/media/3og0IUnHoyVpsfxgQ0/giphy.gif)
 
 ![](https://i.imgur.com/koCgbAW.png)
