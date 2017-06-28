@@ -25,6 +25,7 @@ I've still got a bunch to do:
 - make the robot collect the item you pick
 - make the robot put it on the conveyor belt
 - determine whether or not the rocket can take off
+- improve framerate in some areas (looking at cupboards)
 
 
 ... so I'll be tinkering on this when I get some time, and maybe taking it along to any future VR hacks I take part in.
