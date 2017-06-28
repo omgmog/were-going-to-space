@@ -395,7 +395,7 @@
       'PlaneGeometry', [10,15,1],
       'MeshPhongMaterial', [{
         side: T.DoubleSide,
-        map: new T.TextureLoader().load('assets/paper.jpg'),
+        map: new T.TextureLoader().load('assets/paper_.jpg'),
       }]
     );
     utils.append(_page, paper);

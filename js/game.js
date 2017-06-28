@@ -47,7 +47,7 @@ var game = (function () {
     var prompt = utils.getNamedObject(core.scene, 'bubbleprompt');
     var plane = utils.getNamedObject(prompt, 'bubbleplane');
     var robotPhase = core.robotPhases[core.robotPhase];
-    console.log(robotPhase);
+    // console.log(robotPhase);
     switch (robotPhase) {
       case 'prompted-sheet':
         prompt.visible = true;
@@ -87,11 +87,11 @@ var game = (function () {
   }
 
   utils.animate = function () {
-    core.stats.begin();
+    // core.stats.begin();
     utils.update(core.clock.getDelta());
     utils.render(core.clock.getDelta());
     utils.updateRaycaster();
-    core.stats.end();
+    // core.stats.end();
     requestAnimationFrame(utils.animate);
   };
 
@@ -548,9 +548,9 @@ var game = (function () {
 
   utils.startGame = function () {
       core.gamePhase = 1;
-      core.stats = new Stats();
-      core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-      document.body.appendChild( core.stats.dom );
+      // core.stats = new Stats();
+      // core.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+      // document.body.appendChild( core.stats.dom );
 
       utils.playSound('sounds/music.mp3', {
         loop: true,
@@ -721,8 +721,38 @@ var game = (function () {
 
     core.robot = robot;
   }
+  core.makeRobotPositions = function () {
+    var radius = 90;
+    var angles = [
+      [-40, null, 'robotslot', null],
 
-  core.makeRobot();
+      [190, null, 'slot_2_2_2', null],
+      [180, null, 'slot_2_2_1', null],
+      [170, null, 'slot_2_2_0', null],
+
+      [160, null, 'slot_1_2_2', null],
+      [150, null, 'slot_1_2_1', null],
+      [140, null, 'slot_1_2_0', null],
+
+      [130, null, 'slot_0_2_2', null],
+      [120, null, 'slot_0_2_1', null],
+      [110, null, 'slot_0_2_0', null],
+    ]
+    var box = utils.build('BoxGeometry', [2,2,2], 'MeshPhongMaterial', [{color:utils.colors.yellow}]);
+    utils.do(angles.length, function (i) {
+      var angle = angles[i]
+      var a = utils.d2r(angle[0]);
+      var x = Math.cos(a) * radius;
+      var z = Math.sin(a) * radius;
+      var point = new T.Vector3(x,-20,z);
+      var b = box.clone();
+      b.position.set(point.x, point.y, point.z);
+      angle[1] = point;
+      angle[3] = b;
+      utils.append(angles[i][3], core.scene);
+    });
+  };
+
 
   core.robotPhases = [
     'no-interaction',
@@ -813,6 +843,9 @@ var game = (function () {
 
     // do something here to present overlay
 
+
+  core.makeRobot();
+  core.makeRobotPositions();
     utils.showMenu();
 
   };
